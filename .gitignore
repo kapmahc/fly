@@ -1,0 +1,15 @@
+
+# editors
+.*.swp
+.*.un~
+*.iml
+/.idea
+
+
+# gradle
+/.gradle
+/build
+
+# nodejs
+/node_modules
+/package-lock.json
