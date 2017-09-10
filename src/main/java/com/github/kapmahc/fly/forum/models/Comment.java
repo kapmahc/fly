@@ -1,12 +1,15 @@
-package com.github.kapmahc.fly.nut.models;
+package com.github.kapmahc.fly.forum.models;
+
+import com.github.kapmahc.fly.nut.models.ContentType;
+import com.github.kapmahc.fly.nut.models.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "leave_words")
-public class LeaveWord implements Serializable {
+@Table(name = "forum_comments")
+public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -16,8 +19,16 @@ public class LeaveWord implements Serializable {
     @Column(nullable = false, length = 8)
     @Enumerated(EnumType.STRING)
     private ContentType type;
+    @Column(nullable = false)
+    private Date updatedAt;
     @Column(nullable = false, updatable = false)
     private Date createdAt;
+    @ManyToOne
+    @JoinColumn(nullable = false, updatable = false)
+    private User user;
+    @ManyToOne
+    @JoinColumn(nullable = false, updatable = false)
+    private Article article;
 
     public Long getId() {
         return id;
@@ -43,11 +54,35 @@ public class LeaveWord implements Serializable {
         this.type = type;
     }
 
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
     }
 }
