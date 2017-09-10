@@ -2,43 +2,27 @@ package com.github.kapmahc.fly.nut.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "roles", indexes = {
-        @Index(columnList = "name,resourceType,resourceId", unique = true),
-        @Index(columnList = "name"),
+@Table(name = "votes", indexes = {
+        @Index(columnList = "resourceType,resourceId", unique = true),
         @Index(columnList = "resourceType")
 })
-public class Role implements Serializable {
+public class Vote implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
-    private String name;
     private Long resourceId;
     @Column(nullable = false)
     private String resourceType;
     @Column(nullable = false)
+    private int point;
+    @Column(nullable = false)
     private Date updatedAt;
     @Column(nullable = false, updatable = false)
     private Date createdAt;
-    @OneToMany(mappedBy = "role")
-    private List<Policy> policies;
-
-    public Role() {
-        policies = new ArrayList<>();
-    }
-
-    public List<Policy> getPolicies() {
-        return policies;
-    }
-
-    public void setPolicies(List<Policy> policies) {
-        this.policies = policies;
-    }
 
     public Long getId() {
         return id;
@@ -46,14 +30,6 @@ public class Role implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Long getResourceId() {
@@ -70,6 +46,14 @@ public class Role implements Serializable {
 
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 
     public Date getUpdatedAt() {
