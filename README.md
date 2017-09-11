@@ -39,7 +39,8 @@ GRANT ALL PRIVILEGES ON DATABASE db-name TO user-name;
 
 ```
 go get -u -d github.com/mattes/migrate/cli github.com/lib/pq
-go build -tags 'postgres' -o $GOPATH/bin/migrate github.com/mattes/migrate/cli
+go build -ldflags '-s -w' -tags 'postgres' -o $GOPATH/bin/migrate github.com/mattes/migrate/cli
+migrate -path db/migrate -database postgres://postgres@localhost:5432/fly?sslmode=disable up
 ```
 
 - Chrome browser: F12 => Console settings => Log XMLHTTPRequests

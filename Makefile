@@ -1,10 +1,8 @@
 dst=fly
 
 build:
-	bee pack -v -ba="-ldflags '-s'" -exp=tmp:node_modules:.git -exs=.un~:.swp:.go:Makefile
-
+	go build -ldflags '-s -w' -tags 'postgres' -o migrate github.com/mattes/migrate/cli
+	bee pack -v -ba="-ldflags '-s'" -exp=tmp:node_modules:.git -exs=.un~:.swp:.tmp:.go:Makefile
 
 clean:
-	-rm -r $(dst) $(dst).tar.gz
-
-
+	-rm migrate $(dst) $(dst).tar.gz

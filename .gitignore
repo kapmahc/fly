@@ -1,5 +1,7 @@
 # beego
 /fly*
+/routers/commentsRouter_*.go
+/lastupdate.tmp
 
 # nodejs
 /node_modules/
@@ -10,3 +12,4 @@
 
 # test
 /tmp/
+/migrate
