@@ -1,0 +1,12 @@
+# beego
+/fly*
+
+# nodejs
+/node_modules/
+
+# editor
+.*.swp
+.*.un~
+
+# test
+/tmp/
