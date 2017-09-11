@@ -5,6 +5,8 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 // https://www.linode.com/docs/email/postfix/email-with-postfix-dovecot-and-mysql
@@ -35,8 +37,7 @@ type User struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	Domain   Domain
-	DomainID uint
+	Domain *Domain `orm:"rel(fk)"`
 }
 
 // TableName table name
@@ -78,11 +79,14 @@ type Alias struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 	CreatedAt   time.Time `json:"createdAt"`
 
-	DomainID uint
-	Domain   Domain
+	Domain *Domain `orm:"rel(fk)"`
 }
 
 // TableName table name
 func (*Alias) TableName() string {
 	return "mail_aliases"
+}
+
+func init() {
+	orm.RegisterModel(new(Alias), new(User), new(Domain))
 }

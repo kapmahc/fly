@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 	"github.com/beego/i18n"
 	"golang.org/x/text/language"
 )
@@ -61,4 +62,5 @@ func Tr(lang, format string, args ...interface{}) string {
 
 func init() {
 	beego.AddFuncMap("t", Tr)
+	orm.RegisterModel(new(Locale))
 }

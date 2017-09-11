@@ -2,6 +2,7 @@ package nut
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/beego/i18n"
 )
 
 // Controller base controller
@@ -50,7 +51,7 @@ func (p *Controller) detectLocale() {
 	// Set language properties.
 	p.Locale = lang
 	p.Data[LOCALE] = lang
-	p.Data["languages"] = []string{}
+	p.Data["languages"] = i18n.ListLangs()
 
 }
 
@@ -64,6 +65,7 @@ type ApplicationLayout struct {
 // Prepare prepare
 func (p *ApplicationLayout) Prepare() {
 	p.Controller.Prepare()
+	// TODO
 	p.Layout = "layouts/application/index.html"
 }
 
@@ -74,6 +76,7 @@ type DashboardLayout struct {
 
 // Prepare prepare
 func (p *DashboardLayout) Prepare() {
+	p.Controller.Prepare()
 	// TODO
 	p.Layout = "layouts/dashboard/index.html"
 }

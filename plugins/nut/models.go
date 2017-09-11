@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/astaxie/beego/orm"
 	"github.com/google/uuid"
 )
 
@@ -29,23 +30,21 @@ type User struct {
 	ID              uint       `orm:"column(id)" json:"id"`
 	Name            string     `json:"name"`
 	Email           string     `json:"email"`
-	UID             string     `orm:"column:uid" json:"uid"`
-	Password        []byte     `json:"-"`
-	ProviderID      string     `json:"-"`
+	UID             string     `orm:"column(uid)" json:"uid"`
+	Password        string     `json:"-"`
+	ProviderID      string     `orm:"column(provider_id)" json:"-"`
 	ProviderType    string     `json:"providerType"`
 	Home            string     `json:"home"`
 	Logo            string     `json:"logo"`
 	SignInCount     uint       `json:"signInCount"`
 	LastSignInAt    *time.Time `json:"lastSignInAt"`
-	LastSignInIP    string     `json:"lastSignInIp"`
+	LastSignInIP    string     `orm:"column(last_sign_in_ip)" json:"lastSignInIp"`
 	CurrentSignInAt *time.Time `json:"currentSignInAt"`
-	CurrentSignInIP string     `json:"currentSignInIp"`
+	CurrentSignInIP string     `orm:"column(current_sign_in_ip)" json:"currentSignInIp"`
 	ConfirmedAt     *time.Time `json:"confirmedAt"`
 	LockedAt        *time.Time `json:"lockedAt"`
 	UpdatedAt       time.Time  `json:"updatedAt"`
 	CreatedAt       time.Time  `json:"createdAt"`
-
-	Logs []Log `json:"-"`
 }
 
 // TableName table name
@@ -85,13 +84,12 @@ type Attachment struct {
 	URL          string    `json:"url"`
 	Length       int64     `json:"length"`
 	MediaType    string    `json:"mediaType"`
-	ResourceID   uint      `json:"resourceId"`
+	ResourceID   uint      `orm:"column(resource_id)" json:"resourceId"`
 	ResourceType string    `json:"resourceType"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 	CreatedAt    time.Time `json:"createdAt"`
 
-	UserID uint `json:"userId"`
-	User   User `json:"-"`
+	User *User `orm:"rel(fk)" json:"-"`
 }
 
 // TableName table name
@@ -109,11 +107,10 @@ type Log struct {
 	ID        uint      `orm:"column(id)" json:"id"`
 	Message   string    `json:"message"`
 	Type      string    `json:"type"`
-	IP        string    `json:"ip"`
+	IP        string    `orm:"column(ip)" json:"ip"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	UserID uint `json:"userId"`
-	User   User `json:"-"`
+	User *User `orm:"rel(fk)" json:"-"`
 }
 
 // TableName table name
@@ -133,10 +130,8 @@ type Policy struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	UserID uint
-	User   User
-	RoleID uint
-	Role   Role
+	User *User `orm:"rel(fk)"`
+	Role *Role `orm:"rel(fk)"`
 }
 
 //Enable is enable?
@@ -154,7 +149,7 @@ func (*Policy) TableName() string {
 type Role struct {
 	ID           uint `orm:"column(id)" json:"id"`
 	Name         string
-	ResourceID   uint
+	ResourceID   uint `orm:"column(resource_id)"`
 	ResourceType string
 	UpdatedAt    time.Time `json:"updatedAt"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -173,7 +168,7 @@ func (p Role) String() string {
 type Vote struct {
 	ID           uint `orm:"column(id)" json:"id"`
 	Point        int
-	ResourceID   uint
+	ResourceID   uint `orm:"column(resource_id)"`
 	ResourceType string
 	UpdatedAt    time.Time `json:"updatedAt"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -247,4 +242,12 @@ type FriendLink struct {
 // TableName table name
 func (*FriendLink) TableName() string {
 	return "friend_links"
+}
+
+func init() {
+	orm.RegisterModel(
+		new(User), new(Log), new(Role), new(Policy),
+		new(Attachment), new(Vote), new(LeaveWord), new(FriendLink),
+		new(Card), new(Link),
+	)
 }

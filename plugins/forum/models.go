@@ -3,6 +3,7 @@ package forum
 import (
 	"time"
 
+	"github.com/astaxie/beego/orm"
 	"github.com/kapmahc/fly/plugins/nut"
 )
 
@@ -15,10 +16,9 @@ type Article struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	UserID   uint      `json:"userId"`
-	User     nut.User  `json:"user"`
-	Tags     []Tag     `orm:"rel(m2m);rel_table(forum_articles_tags)" json:"tags"`
-	Comments []Comment `json:"comments"`
+	User     *nut.User  `orm:"rel(fk)" json:"user"`
+	Tags     []*Tag     `orm:"rel(m2m);rel_table(forum_articles_tags)" json:"tags"`
+	Comments []*Comment `orm:"reverse(many)" json:"comments"`
 }
 
 // TableName table name
@@ -33,7 +33,7 @@ type Tag struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	Articles []Article `orm:"rel(m2m);rel_table(forum_articles_tags)" json:"articles"`
+	Articles []*Article `orm:"reverse(many);rel_table(forum_articles_tags)" json:"articles"`
 }
 
 // TableName table name
@@ -49,13 +49,15 @@ type Comment struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	UserID    uint     `json:"userId"`
-	User      nut.User `json:"user"`
-	ArticleID uint     `json:"articleId"`
-	Article   Article  `json:"article"`
+	User    *nut.User `orm:"rel(fk)" json:"user"`
+	Article *Article  `orm:"rel(fk)" json:"article"`
 }
 
 // TableName table name
 func (*Comment) TableName() string {
 	return "forum_comments"
+}
+
+func init() {
+	orm.RegisterModel(new(Article), new(Tag), new(Comment))
 }

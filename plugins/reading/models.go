@@ -3,6 +3,7 @@ package reading
 import (
 	"time"
 
+	"github.com/astaxie/beego/orm"
 	"github.com/kapmahc/fly/plugins/nut"
 )
 
@@ -37,13 +38,14 @@ type Note struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	UserID uint
-	User   nut.User
-	BookID uint
-	Book   Book
+	User *nut.User `orm:"rel(fk)"`
+	Book *Book     `orm:"rel(fk)"`
 }
 
 // TableName table name
 func (*Note) TableName() string {
 	return "reading_notes"
+}
+func init() {
+	orm.RegisterModel(new(Book), new(Note))
 }

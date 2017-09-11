@@ -5,6 +5,8 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 // http://chagridsada.blogspot.com/2011/01/openvpn-system-based-on-userpass.html
@@ -57,10 +59,10 @@ func (p *User) ChkPassword(password string) bool {
 
 // Log log
 type Log struct {
-	ID          uint `orm:"column(id)" json:"id"`
-	TrustedIP   string
+	ID          uint   `orm:"column(id)" json:"id"`
+	TrustedIP   string `orm:"column(trusted_id)"`
 	TrustedPort uint
-	RemoteIP    string
+	RemoteIP    string `orm:"column(remote_ip)"`
 	RemotePort  uint
 	StartUp     time.Time
 	ShutDown    *time.Time
@@ -69,11 +71,13 @@ type Log struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 	CreatedAt   time.Time `json:"createdAt"`
 
-	UserID uint
-	User   User
+	User *User `orm:"rel(fk)"`
 }
 
 // TableName table name
 func (*Log) TableName() string {
 	return "vpn_logs"
+}
+func init() {
+	orm.RegisterModel(new(User), new(Log))
 }

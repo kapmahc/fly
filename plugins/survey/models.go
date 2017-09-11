@@ -2,6 +2,8 @@ package survey
 
 import (
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 // Form form
@@ -12,9 +14,6 @@ type Form struct {
 	Type      string    `json:"type"`
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
-
-	Fields  []Field  `json:"fields"`
-	Records []Record `json:"records"`
 }
 
 // TableName table name
@@ -34,8 +33,7 @@ type Field struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	FormID uint `json:"formId"`
-	Form   Form
+	Form *Form `orm:"rel(fk)"`
 }
 
 // TableName table name
@@ -50,11 +48,13 @@ type Record struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 
-	FormID uint `json:"formId"`
-	Form   Form
+	Form *Form `orm:"rel(fk)"`
 }
 
 // TableName table name
 func (*Record) TableName() string {
 	return "survey_records"
+}
+func init() {
+	orm.RegisterModel(new(Form), new(Field), new(Record))
 }
