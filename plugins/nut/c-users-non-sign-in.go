@@ -2,14 +2,16 @@ package nut
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
 
+	"golang.org/x/text/language"
+
 	"github.com/SermoDigital/jose/jws"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/validation"
 	gomail "gopkg.in/gomail.v2"
 )
 
@@ -81,6 +83,12 @@ type fmSignUp struct {
 	PasswordConfirmation string `form:"passwordConfirmation"`
 }
 
+func (p fmSignUp) Valid(v *validation.Validation) {
+	if p.Password != p.PasswordConfirmation {
+		v.SetError("PasswordConfirmation", Tr(language.AmericanEnglish.String(), "nut.errors.user.passwords-not-match"))
+	}
+}
+
 // PostUsersSignUp user sign up
 // @router /users/sign-up [post]
 func (p *Plugin) PostUsersSignUp() {
@@ -92,11 +100,6 @@ func (p *Plugin) PostUsersSignUp() {
 	lang := p.Locale()
 	var fm fmSignUp
 	err := p.ParseForm(&fm)
-	if err == nil {
-		if fm.Password != fm.PasswordConfirmation {
-			err = errors.New(Tr(lang, "nut.errors.user.passwords-not-match"))
-		}
-	}
 
 	var user *User
 	ip := p.Ctx.Input.IP()
@@ -106,7 +109,7 @@ func (p *Plugin) PostUsersSignUp() {
 			Filter("provider_type", UserTypeEmail).
 			Filter("provider_id", fm.Email).
 			Count(); err == nil && cnt > 0 {
-			err = errors.New(Tr(lang, "nut.errors.user.email-already-exist"))
+			err = Te(lang, "nut.errors.user.email-already-exist")
 		}
 	}
 	if err == nil {
@@ -308,6 +311,12 @@ func (p *Plugin) GetUsersResetPassword() {
 type fmResetPassword struct {
 	Password             string `form:"password" valid:"MinSize(6)"`
 	PasswordConfirmation string `form:"passwordConfirmation"`
+}
+
+func (p fmResetPassword) Valid(v *validation.Validation) {
+	if p.Password != p.PasswordConfirmation {
+		v.SetError("PasswordConfirmation", Tr(language.AmericanEnglish.String(), "nut.errors.user.passwords-not-match"))
+	}
 }
 
 // PostUsersResetPassword reset user password

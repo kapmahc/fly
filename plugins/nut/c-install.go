@@ -1,10 +1,12 @@
 package nut
 
 import (
-	"errors"
 	"net/http"
 
+	"golang.org/x/text/language"
+
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/validation"
 )
 
 // GetInstall init database
@@ -25,6 +27,12 @@ type fmInstall struct {
 	PasswordConfirmation string `form:"passwordConfirmation"`
 }
 
+func (p fmInstall) Valid(v *validation.Validation) {
+	if p.Password != p.PasswordConfirmation {
+		v.SetError("PasswordConfirmation", Tr(language.AmericanEnglish.String(), "nut.errors.user.passwords-not-match"))
+	}
+}
+
 // PostInstall init database
 // @router /install [post]
 func (p *Plugin) PostInstall() {
@@ -37,11 +45,6 @@ func (p *Plugin) PostInstall() {
 	lang := p.Locale()
 	var fm fmInstall
 	err := p.ParseForm(&fm)
-	if err == nil {
-		if fm.Password != fm.PasswordConfirmation {
-			err = errors.New(Tr(lang, "nut.errors.user.passwords-not-match"))
-		}
-	}
 
 	if err == nil {
 		err = SetLocale(o, lang, "site.title", fm.Title)

@@ -1,7 +1,6 @@
 package nut
 
 import (
-	"errors"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -15,15 +14,15 @@ func SignIn(o orm.Ormer, lang, ip, email, password string) (*User, error) {
 	}
 	if HMAC().Chk([]byte(password), []byte(user.Password)) {
 		AddLog(o, user, ip, Tr(lang, "nut.logs.user.sign-in.failed"))
-		return nil, errors.New(Tr(lang, "nut.errors.user.email-password-not-match"))
+		return nil, Te(lang, "nut.errors.user.email-password-not-match")
 	}
 
 	if !user.IsConfirm() {
-		return nil, errors.New(Tr(lang, "nut.errors.user.not-confirm"))
+		return nil, Te(lang, "nut.errors.user.not-confirm")
 	}
 
 	if user.IsLock() {
-		return nil, errors.New(Tr(lang, "nut.errors.user.is-lock"))
+		return nil, Te(lang, "nut.errors.user.is-lock")
 	}
 
 	AddLog(o, user, ip, Tr(lang, "nut.logs.user.sign-in.success"))
