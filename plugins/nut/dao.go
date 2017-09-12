@@ -9,7 +9,7 @@ import (
 
 // SignIn set sign-in info
 func SignIn(o orm.Ormer, lang, email, password, ip string) (*User, error) {
-	user, err := GetByEmail(o, email)
+	user, err := GetByEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -50,20 +50,19 @@ func SignIn(o orm.Ormer, lang, email, password, ip string) (*User, error) {
 }
 
 // GetUserByUID get user by uid
-func GetUserByUID(o orm.Ormer, uid string) (*User, error) {
+func GetUserByUID(uid string) (*User, error) {
 	var u User
 
-	if err := o.QueryTable(&u).Filter("uid", uid).One(&u); err != nil {
+	if err := orm.NewOrm().QueryTable(&u).Filter("uid", uid).One(&u); err != nil {
 		return nil, err
 	}
 	return &u, nil
 }
 
 // GetByEmail get user by email
-func GetByEmail(o orm.Ormer, email string) (*User, error) {
+func GetByEmail(email string) (*User, error) {
 	var user User
-
-	if err := o.QueryTable(&user).
+	if err := orm.NewOrm().QueryTable(&user).
 		Filter("provider_type", UserTypeEmail).
 		Filter("provider_id", email).
 		One(&user); err != nil {

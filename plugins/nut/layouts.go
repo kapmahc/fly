@@ -15,7 +15,15 @@ import (
 // Controller base controller
 type Controller struct {
 	beego.Controller
-	Locale string
+
+	locale  string
+	user    *User
+	isAdmin bool
+}
+
+// Locale get current locale
+func (p *Controller) Locale() string {
+	return p.locale
 }
 
 // Redirect http 302 redirect
@@ -23,16 +31,31 @@ func (p *Controller) Redirect(name string, args ...interface{}) {
 	p.Controller.Redirect(p.URLFor(name, args...), http.StatusFound)
 }
 
-// Check write error flash if error
-func (p *Controller) Check(e error) bool {
-	if e == nil {
-		return true
+// HomeURL home url
+func (p *Controller) HomeURL() string {
+	req := p.Ctx.Request
+	scheme := "https"
+	if p.Ctx.Request.TLS != nil {
+		scheme = scheme + "s"
 	}
-	beego.Error(e)
+	return scheme + "://" + req.Host
+}
+
+// Flash write flash message
+func (p *Controller) Flash(fn func() string, er error) bool {
+	ok := false
 	f := beego.NewFlash()
-	f.Error(e.Error())
+	if er == nil {
+		if fn != nil {
+			f.Notice(fn())
+		}
+		ok = true
+	} else {
+		beego.Error(er)
+		f.Error(er.Error())
+	}
 	f.Store(&p.Controller)
-	return false
+	return ok
 }
 
 // Prepare prepare
@@ -73,13 +96,14 @@ func (p *Controller) Abort(s int, e error) {
 }
 
 func (p *Controller) detectLocale() {
+	const key = "locale"
 	write := false
 	// 1. Check URL arguments.
-	lang := p.Input().Get(LOCALE)
+	lang := p.Input().Get(key)
 
 	// 2. Get language information from cookies.
 	if len(lang) == 0 {
-		lang = p.Ctx.GetCookie(LOCALE)
+		lang = p.Ctx.GetCookie(key)
 	} else {
 		write = true
 	}
@@ -100,12 +124,12 @@ func (p *Controller) detectLocale() {
 
 	// Save language information in cookies.
 	if write {
-		p.Ctx.SetCookie(LOCALE, lang, 1<<32-1, "/")
+		p.Ctx.SetCookie(key, lang, 1<<32-1, "/")
 	}
 
 	// Set language properties.
-	p.Locale = lang
-	p.Data[LOCALE] = lang
+	p.locale = lang
+	p.Data[key] = lang
 	p.Data["languages"] = i18n.ListLangs()
 
 }
@@ -121,3 +145,47 @@ func (p *Controller) LayoutDashboard() {
 	// TODO
 	p.Layout = "layouts/dashboard/index.html"
 }
+
+// func (p *Controller) parseUserFromRequest() {
+// 	cm, err := JWT().ParseFromRequest(p.Ctx.Request)
+// 	if err != nil {
+// 		return
+// 	}
+// 	user, err := GetUserByUID(cm.Get(UID).(string))
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	if !user.IsConfirm() {
+// 		return nil, E(lng, "auth.errors.user.not-confirm")
+// 	}
+// 	if user.IsLock() {
+// 		return nil, E(lng, "auth.errors.user.is-lock")
+// 	}
+// 	return user, nil
+// }
+//
+// func (p *Controller) parseCurrentUser() error {
+// 	if user, err := JWT().getUserFromRequest(c); err == nil {
+// 		c.Set(CurrentUser, user)
+// 		c.Set(IsAdmin, Is(user.ID, RoleAdmin))
+// 	}
+// 	return nil
+// }
+//
+// // MustSignIn must-sign-in
+// func (p *Controller) MustSignIn() error {
+// 	if _, ok := c.MustGet(CurrentUser).(*User); ok {
+// 		return nil
+// 	}
+// 	lng := c.MustGet(key).(string)
+// 	return E(lng, "auth.errors.please-sign-in")
+// }
+//
+// // MustAdminMiddleware must has admin role
+// func (p *Controller) MustAdmin() error {
+// 	if is, ok := c.MustGet(IsAdmin).(bool); ok && is {
+// 		return nil
+// 	}
+// 	lng := c.MustGet(key).(string)
+// 	return E(lng, "errors.not-allow")
+// }

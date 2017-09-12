@@ -9,6 +9,7 @@ import (
 	"github.com/astaxie/beego/session"
 	"github.com/astaxie/beego/session/redis"
 	"github.com/astaxie/beego/toolbox"
+	"github.com/streadway/amqp"
 )
 
 type databaseHealthCheck struct {
@@ -48,8 +49,18 @@ func (p *cacheHealthCheck) Check() error {
 	return cm.Put("ping", "pong", 5*time.Second)
 }
 
+type amqpHealthCheck struct {
+}
+
+func (p *amqpHealthCheck) Check() error {
+	return JOBBER().open(func(ch *amqp.Channel) error {
+		return nil
+	})
+}
+
 func init() {
 	toolbox.AddHealthCheck("database", &databaseHealthCheck{})
 	toolbox.AddHealthCheck("session", &sessionHealthCheck{})
 	toolbox.AddHealthCheck("cache", &cacheHealthCheck{})
+	toolbox.AddHealthCheck("amqp", &amqpHealthCheck{})
 }

@@ -10,9 +10,9 @@ import (
 // GetInstall init database
 // @router /install [get]
 func (p *Plugin) GetInstall() {
-	// p.mustDbEmpty(orm.NewOrm())
+	p.mustDbEmpty(orm.NewOrm())
 	p.LayoutApplication()
-	p.Data[TITLE] = Tr(p.Locale, "nut.install.title")
+	p.Data[TITLE] = Tr(p.Locale(), "nut.install.title")
 	p.TplName = "nut/install.html"
 }
 
@@ -34,27 +34,28 @@ func (p *Plugin) PostInstall() {
 	}
 	p.mustDbEmpty(o)
 
+	lang := p.Locale()
 	var fm fmInstall
 	err := p.ParseForm(&fm)
 	if err == nil {
 		if fm.Password != fm.PasswordConfirmation {
-			err = errors.New(Tr(p.Locale, "errors.passwords-not-match"))
+			err = errors.New(Tr(lang, "nut.errors.user.passwords-not-match"))
 		}
 	}
 
 	if err == nil {
-		err = SetLocale(p.Locale, "site.title", fm.Title)
+		err = SetLocale(o, lang, "site.title", fm.Title)
 	}
 	if err == nil {
-		err = SetLocale(p.Locale, "site.subhead", fm.Subhead)
+		err = SetLocale(o, lang, "site.subhead", fm.Subhead)
 	}
 	var user *User
 	ip := p.Ctx.Input.IP()
 	if err == nil {
-		user, err = AddEmailUser(o, p.Locale, ip, fm.Name, fm.Email, fm.Password)
+		user, err = AddEmailUser(o, lang, ip, fm.Name, fm.Email, fm.Password)
 	}
 	if err == nil {
-		err = confirmUser(o, p.Locale, ip, user)
+		err = confirmUser(o, lang, ip, user)
 	}
 	if err == nil {
 		for _, r := range []string{RoleAdmin, RoleRoot} {
@@ -69,11 +70,11 @@ func (p *Plugin) PostInstall() {
 	}
 
 	if err == nil {
-		err = o.Commit()
+		o.Commit()
 	} else {
-		err = o.Rollback()
+		o.Rollback()
 	}
-	if p.Check(err) {
+	if p.Flash(nil, err) {
 		p.Redirect("nut.Plugin.GetHome")
 	} else {
 		p.Redirect("nut.Plugin.GetInstall")

@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"path"
 
 	"github.com/astaxie/beego"
@@ -33,6 +34,11 @@ func main() {
 
 	toolbox.StartTask()
 	defer toolbox.StopTask()
+
+	go func() {
+		host, _ := os.Hostname()
+		nut.JOBBER().Receive(host)
+	}()
 
 	beego.ErrorController(&nut.ErrorController{})
 	beego.Run()

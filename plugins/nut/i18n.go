@@ -1,7 +1,9 @@
 package nut
 
 import (
+	"bytes"
 	"fmt"
+	"html/template"
 	"os"
 	"path/filepath"
 	"time"
@@ -10,11 +12,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/beego/i18n"
 	"golang.org/x/text/language"
-)
-
-const (
-	// LOCALE locale key
-	LOCALE = "locale"
 )
 
 //Locale locale
@@ -33,9 +30,8 @@ func (*Locale) TableName() string {
 }
 
 // SetLocale set locale info in database
-func SetLocale(lang, code, message string) error {
+func SetLocale(o orm.Ormer, lang, code, message string) error {
 	var it Locale
-	o := orm.NewOrm()
 	err := o.QueryTable(&it).
 		Filter("lang", lang).
 		Filter("code", code).
@@ -79,17 +75,42 @@ func LoadLocales() error {
 	return nil
 }
 
-// Tr translate content to target language.
-func Tr(lang, format string, args ...interface{}) string {
+// GetLocale get locale message
+func GetLocale(lang, code string) (string, error) {
 	var it Locale
 	if err := orm.NewOrm().QueryTable(&it).
 		Filter("lang", lang).
-		Filter("code", format).
-		One(&it, "Message"); err == nil {
-		return fmt.Sprintf(it.Message, args...)
+		Filter("code", code).
+		One(&it, "Message"); err != nil {
+		return "", err
+	}
+	return it.Message, nil
+}
+
+// Th translate content to target language.(html)
+func Th(lang, code string, obj interface{}) (string, error) {
+	msg, err := GetLocale(lang, code)
+	if err != nil {
+		msg = i18n.Tr(lang, code)
 	}
 
-	return i18n.Tr(lang, format, args...)
+	tpl, err := template.New("").Parse(msg)
+	if err != nil {
+		return "", err
+	}
+	var buf bytes.Buffer
+	if err = tpl.Execute(&buf, obj); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
+}
+
+// Tr translate content to target language.
+func Tr(lang, code string, args ...interface{}) string {
+	if msg, err := GetLocale(lang, code); err == nil {
+		return fmt.Sprintf(msg, args...)
+	}
+	return i18n.Tr(lang, code, args...)
 }
 
 func init() {
