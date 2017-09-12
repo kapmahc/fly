@@ -3,43 +3,18 @@ package main
 import (
 	"log"
 	"os"
-	"path"
 
-	"github.com/astaxie/beego"
 	_ "github.com/astaxie/beego/cache/redis"
-	"github.com/astaxie/beego/logs"
-	"github.com/astaxie/beego/orm"
 	_ "github.com/astaxie/beego/session/redis"
-	"github.com/astaxie/beego/toolbox"
 	"github.com/kapmahc/fly/plugins/nut"
 	_ "github.com/kapmahc/fly/routers"
 	_ "github.com/lib/pq"
+	_ "github.com/mattes/migrate/database/postgres"
+	_ "github.com/mattes/migrate/source/file"
 )
 
 func main() {
-	logs.SetLogger(logs.AdapterConsole)
-	logs.SetLogger(logs.AdapterFile, `{"filename":"`+path.Join("tmp", "www.log")+`"}`)
-
-	orm.Debug = beego.BConfig.RunMode != beego.PROD
-	orm.RegisterDataBase(
-		"default",
-		beego.AppConfig.String("databasedriver"),
-		beego.AppConfig.String("databasesource"),
-	)
-
-	if err := nut.Open(); err != nil {
-		log.Panic(err)
-		return
+	if err := nut.Main(os.Args...); err != nil {
+		log.Fatal(err)
 	}
-
-	toolbox.StartTask()
-	defer toolbox.StopTask()
-
-	go func() {
-		host, _ := os.Hostname()
-		nut.JOBBER().Receive(host)
-	}()
-
-	beego.ErrorController(&nut.ErrorController{})
-	beego.Run()
 }
