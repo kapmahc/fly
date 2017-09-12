@@ -1,0 +1,18 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-6">
+    {{template "layouts/application/flash.html" .}}
+    <h2>{{.title}}</h2>
+    <hr/>
+    <form action="{{urlfor "nut.Plugin.CreateLeaveWord"}}" method="post" data-confirm="{{t .locale "helpers.are-you-sure"}}">
+      <input type="hidden" id="type" name="type" value="text"/>
+      <div class="form-group">
+        <label for="body">{{t .locale "attributes.body"}}</label>
+        <textarea class="form-control" id="body" name="body" rows="6" aria-describedby="bodyHelp"></textarea>
+        <small id="bodyHelp" class="form-text text-muted">{{t .locale "nut.leave-words.new.body-helper"}}</small>
+      </div>
+      {{template "layouts/application/form-buttons.html" .}}
+    </form>
+    <br/>
+    {{template "nut/users/shared-links.html" .}}
+  </div>
+</div>

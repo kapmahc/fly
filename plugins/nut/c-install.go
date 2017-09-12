@@ -3,10 +3,9 @@ package nut
 import (
 	"net/http"
 
-	"golang.org/x/text/language"
-
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
+	"golang.org/x/text/language"
 )
 
 // GetInstall init database
