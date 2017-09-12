@@ -1,7 +1,13 @@
 package nut
 
 import (
+	"errors"
+	"fmt"
+	"html/template"
+	"strings"
+
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/validation"
 	"github.com/beego/i18n"
 )
 
@@ -11,10 +17,52 @@ type Controller struct {
 	Locale string
 }
 
+// Check write error flash if error
+func (p *Controller) Check(e error) bool {
+	if e == nil {
+		return true
+	}
+
+	f := beego.NewFlash()
+	f.Error(e.Error())
+	f.Store(&p.Controller)
+	return false
+}
+
 // Prepare prepare
 func (p *Controller) Prepare() {
-	// detect lang
+	beego.ReadFromRequest(&p.Controller)
+	p.Data["xsrf"] = template.HTML(p.XSRFFormHTML())
 	p.detectLocale()
+}
+
+// ParseForm parse form
+func (p *Controller) ParseForm(fm interface{}) error {
+	if er := p.Controller.ParseForm(fm); er != nil {
+		return er
+	}
+	var va validation.Validation
+	ok, er := va.Valid(fm)
+	if er != nil {
+		return er
+	}
+	if !ok {
+		var msg []string
+		for _, e := range va.Errors {
+			msg = append(msg, fmt.Sprintf("%s: %s", e.Field, e.Message))
+		}
+		return errors.New(strings.Join(msg, "<br/>"))
+	}
+	return nil
+}
+
+// Abort http abort
+func (p *Controller) Abort(s int, e error) {
+	if e == nil {
+		p.Controller.Abort("500")
+	} else {
+		p.CustomAbort(s, e.Error())
+	}
 }
 
 func (p *Controller) detectLocale() {
@@ -55,14 +103,14 @@ func (p *Controller) detectLocale() {
 
 }
 
-// ApplicationLayout application layout
-func (p *Controller) ApplicationLayout() {
+// LayoutApplication use application layout
+func (p *Controller) LayoutApplication() {
 	// TODO
 	p.Layout = "layouts/application/index.html"
 }
 
-// DashboardLayout dashboard layout
-func (p *Controller) DashboardLayout() {
+// LayoutDashboard use dashboard layout
+func (p *Controller) LayoutDashboard() {
 	// TODO
 	p.Layout = "layouts/dashboard/index.html"
 }

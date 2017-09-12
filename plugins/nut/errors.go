@@ -22,5 +22,5 @@ func (p *ErrorController) Error500() {
 func (p *ErrorController) show(c int) {
 	p.Data["content"] = http.StatusText(c)
 	p.TplName = "error.html"
-	p.ApplicationLayout()
+	p.LayoutApplication()
 }

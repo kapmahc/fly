@@ -1,0 +1,37 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-6">
+    {{template "layouts/application/flash.html" .}}
+    <h2>{{t .locale "nut.install.title"}}</h2>
+    <hr/>
+    <form method="post" data-confirm="{{t .locale "helpers.are-you-sure"}}">
+      <div class="form-group">
+        <label for="title">{{t .locale "attributes.title"}}</label>
+        <input type="text" class="form-control" id="title" name="title">
+      </div>
+      <div class="form-group">
+        <label for="subhead">{{t .locale "attributes.subhead"}}</label>
+        <input type="text" class="form-control" id="subhead" name="subhead">
+      </div>
+      <div class="form-group">
+        <label for="name">{{t .locale "attributes.username"}}</label>
+        <input type="text" class="form-control" id="name" name="name">
+      </div>
+      <div class="form-group">
+        <label for="email">{{t .locale "attributes.email"}}</label>
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">{{t .locale "helpers.email"}}</small>
+      </div>
+      <div class="form-group">
+        <label for="password">{{t .locale "attributes.password"}}</label>
+        <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+        <small id="passwordHelp" class="form-text text-muted">{{t .locale "helpers.password"}}</small>
+      </div>
+      <div class="form-group">
+        <label for="passwordConfirmation">{{t .locale "attributes.passwordConfirmation"}}</label>
+        <input type="password" class="form-control" id="passwordConfirmation" name="passwordConfirmation" aria-describedby="passwordConfirmationHelp">
+        <small id="passwordConfirmationHelp" class="form-text text-muted">{{t .locale "helpers.passwordConfirmation"}}</small>
+      </div>
+      {{template "layouts/application/form-buttons.html" .}}
+    </form>
+  </div>
+</div>

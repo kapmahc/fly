@@ -12,7 +12,8 @@ import (
 // GetHome home
 // @router / [get]
 func (p *Plugin) GetHome() {
-	p.TplName = "index.tpl"
+	p.LayoutApplication()
+	p.TplName = "nut/home.html"
 }
 
 // GetNginxConf nginx.conf
@@ -20,7 +21,7 @@ func (p *Plugin) GetHome() {
 func (p *Plugin) GetNginxConf() {
 	tpl, err := template.ParseFiles(path.Join("templates", "nginx.conf"))
 	if err != nil {
-		p.CustomAbort(http.StatusOK, err.Error())
+		p.Abort(http.StatusOK, err)
 	}
 	pwd, _ := os.Getwd()
 	ssl, _ := p.GetBool("ssl", false)
