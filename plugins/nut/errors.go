@@ -6,7 +6,7 @@ import (
 
 // ErrorController handle error
 type ErrorController struct {
-	ApplicationLayout
+	Controller
 }
 
 // Error404 http 404
@@ -22,4 +22,5 @@ func (p *ErrorController) Error500() {
 func (p *ErrorController) show(c int) {
 	p.Data["content"] = http.StatusText(c)
 	p.TplName = "error.html"
+	p.ApplicationLayout()
 }

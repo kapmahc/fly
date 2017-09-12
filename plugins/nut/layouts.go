@@ -55,28 +55,14 @@ func (p *Controller) detectLocale() {
 
 }
 
-// ------------------------------------------------
-
 // ApplicationLayout application layout
-type ApplicationLayout struct {
-	Controller
-}
-
-// Prepare prepare
-func (p *ApplicationLayout) Prepare() {
-	p.Controller.Prepare()
+func (p *Controller) ApplicationLayout() {
 	// TODO
 	p.Layout = "layouts/application/index.html"
 }
 
 // DashboardLayout dashboard layout
-type DashboardLayout struct {
-	Controller
-}
-
-// Prepare prepare
-func (p *DashboardLayout) Prepare() {
-	p.Controller.Prepare()
+func (p *Controller) DashboardLayout() {
 	// TODO
 	p.Layout = "layouts/dashboard/index.html"
 }

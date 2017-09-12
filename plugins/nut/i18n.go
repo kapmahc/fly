@@ -1,6 +1,7 @@
 package nut
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -57,6 +58,14 @@ func LoadLocales() error {
 
 // Tr translate content to target language.
 func Tr(lang, format string, args ...interface{}) string {
+	var it Locale
+	if err := orm.NewOrm().QueryTable(&it).
+		Filter("lang", lang).
+		Filter("code", format).
+		One(&it, "Message"); err == nil {
+		return fmt.Sprintf(it.Message, args...)
+	}
+
 	return i18n.Tr(lang, format, args...)
 }
 

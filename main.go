@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"path"
 
 	"github.com/astaxie/beego"
@@ -18,14 +19,16 @@ func main() {
 	logs.SetLogger(logs.AdapterConsole)
 	logs.SetLogger(logs.AdapterFile, `{"filename":"`+path.Join("tmp", "www.log")+`"}`)
 
+	orm.Debug = beego.BConfig.RunMode != beego.PROD
 	orm.RegisterDataBase(
 		"default",
 		beego.AppConfig.String("databasedriver"),
 		beego.AppConfig.String("databasesource"),
 	)
 
-	if err := nut.LoadLocales(); err != nil {
-		beego.Error(err)
+	if err := nut.Open(); err != nil {
+		log.Panic(err)
+		return
 	}
 
 	toolbox.StartTask()
