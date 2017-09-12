@@ -13,8 +13,8 @@ type Article struct {
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
 	Type      string    `json:"type"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	User     *nut.User  `orm:"rel(fk)" json:"user"`
 	Tags     []*Tag     `orm:"rel(m2m);rel_table(forum_articles_tags)" json:"tags"`
@@ -30,8 +30,8 @@ func (*Article) TableName() string {
 type Tag struct {
 	ID        uint      `orm:"column(id)" json:"id"`
 	Name      string    `json:"name"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	Articles []*Article `orm:"reverse(many);rel_table(forum_articles_tags)" json:"articles"`
 }
@@ -46,8 +46,8 @@ type Comment struct {
 	ID        uint      `orm:"column(id)" json:"id"`
 	Body      string    `json:"body"`
 	Type      string    `json:"type"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	User    *nut.User `orm:"rel(fk)" json:"user"`
 	Article *Article  `orm:"rel(fk)" json:"article"`

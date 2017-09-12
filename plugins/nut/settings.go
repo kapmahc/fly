@@ -13,7 +13,7 @@ type Setting struct {
 	Key       string    `json:"key"`
 	Val       string    `json:"val"`
 	Encode    bool      `json:"encode"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 

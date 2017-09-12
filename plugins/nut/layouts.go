@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
+	"net/http"
 	"strings"
 
 	"github.com/astaxie/beego"
@@ -17,12 +18,17 @@ type Controller struct {
 	Locale string
 }
 
+// Redirect http 302 redirect
+func (p *Controller) Redirect(name string, args ...interface{}) {
+	p.Controller.Redirect(p.URLFor(name, args...), http.StatusFound)
+}
+
 // Check write error flash if error
 func (p *Controller) Check(e error) bool {
 	if e == nil {
 		return true
 	}
-
+	beego.Error(e)
 	f := beego.NewFlash()
 	f.Error(e.Error())
 	f.Store(&p.Controller)
@@ -61,6 +67,7 @@ func (p *Controller) Abort(s int, e error) {
 	if e == nil {
 		p.Controller.Abort("500")
 	} else {
+		beego.Error(e)
 		p.CustomAbort(s, e.Error())
 	}
 }

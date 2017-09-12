@@ -22,8 +22,8 @@ type User struct {
 	Enable    bool
 	StartUp   time.Time
 	ShutDown  time.Time
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -68,8 +68,8 @@ type Log struct {
 	ShutDown    *time.Time
 	Received    float64
 	Send        float64
-	UpdatedAt   time.Time `json:"updatedAt"`
-	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt   time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	User *User `orm:"rel(fk)"`
 }

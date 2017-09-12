@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="{{t .locale "site.description"}}">
+    <meta name="keywords" content="{{t .locale "site.keywords"}}">
+    <meta name="author" content="{{t .locale "site.author.name"}}<{{t .locale "site.author.email"}}>">
     <link rel="icon" type="image/png" href="/assets/favicon.png" />
-    <link rel="stylesheet" href="/3rd/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/application.css">
-    <script src="/3rd/jquery/dist/jquery.min.js"></script>
-    <script src="/3rd/jquery-ujs/src/rails.js"></script>
-    <script src="/3rd/popper.js/dist/umd/popper.min.js"></script>
-    <script src="/3rd/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/assets/application.js"></script>
+    <title>{{.title}}|{{t .locale "site.subhead"}}|{{t .locale "site.title"}}</title>
+    {{assets_css "/3rd/bootstrap/dist/css/bootstrap.min.css"}}
+    {{assets_css "/assets/application.css"}}
+    {{assets_js "/3rd/jquery/dist/jquery.min.js"}}
+    {{assets_js "/3rd/jquery-ujs/src/rails.js"}}
+    {{assets_js "/3rd/popper.js/dist/umd/popper.min.js"}}
+    {{assets_js "/3rd/bootstrap/dist/js/bootstrap.min.js"}}
+    {{assets_js "/assets/application.js"}}
   </head>
   <body>
     {{template "layouts/application/header.html" .}}
-    <div class="container">      
+    <div class="container">
       {{.LayoutContent}}
       {{template "layouts/application/footer.html" .}}
     </div>

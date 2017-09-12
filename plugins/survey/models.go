@@ -12,8 +12,8 @@ type Form struct {
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
 	Type      string    `json:"type"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -30,8 +30,8 @@ type Field struct {
 	Label     string    `json:"label"`
 	Value     string    `json:"value"`
 	SortOrder int       `json:"sortOrder"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	Form *Form `orm:"rel(fk)"`
 }
@@ -45,8 +45,8 @@ func (*Field) TableName() string {
 type Record struct {
 	ID        uint      `orm:"column(id)" json:"id"`
 	Value     string    `json:"value"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	Form *Form `orm:"rel(fk)"`
 }

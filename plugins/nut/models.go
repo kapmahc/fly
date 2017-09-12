@@ -34,7 +34,6 @@ type User struct {
 	Password        string     `json:"-"`
 	ProviderID      string     `orm:"column(provider_id)" json:"-"`
 	ProviderType    string     `json:"providerType"`
-	Home            string     `json:"home"`
 	Logo            string     `json:"logo"`
 	SignInCount     uint       `json:"signInCount"`
 	LastSignInAt    *time.Time `json:"lastSignInAt"`
@@ -43,8 +42,8 @@ type User struct {
 	CurrentSignInIP string     `orm:"column(current_sign_in_ip)" json:"currentSignInIp"`
 	ConfirmedAt     *time.Time `json:"confirmedAt"`
 	LockedAt        *time.Time `json:"lockedAt"`
-	UpdatedAt       time.Time  `json:"updatedAt"`
-	CreatedAt       time.Time  `json:"createdAt"`
+	UpdatedAt       time.Time  `orm:"auto_now" json:"updatedAt"`
+	CreatedAt       time.Time  `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -86,8 +85,8 @@ type Attachment struct {
 	MediaType    string    `json:"mediaType"`
 	ResourceID   uint      `orm:"column(resource_id)" json:"resourceId"`
 	ResourceType string    `json:"resourceType"`
-	UpdatedAt    time.Time `json:"updatedAt"`
-	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt    time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	User *User `orm:"rel(fk)" json:"-"`
 }
@@ -106,9 +105,8 @@ func (p *Attachment) IsPicture() bool {
 type Log struct {
 	ID        uint      `orm:"column(id)" json:"id"`
 	Message   string    `json:"message"`
-	Type      string    `json:"type"`
 	IP        string    `orm:"column(ip)" json:"ip"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	User *User `orm:"rel(fk)" json:"-"`
 }
@@ -127,8 +125,8 @@ type Policy struct {
 	ID        uint `orm:"column(id)" json:"id"`
 	StartUp   time.Time
 	ShutDown  time.Time
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	User *User `orm:"rel(fk)"`
 	Role *Role `orm:"rel(fk)"`
@@ -151,8 +149,8 @@ type Role struct {
 	Name         string
 	ResourceID   uint `orm:"column(resource_id)"`
 	ResourceType string
-	UpdatedAt    time.Time `json:"updatedAt"`
-	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt    time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -170,8 +168,8 @@ type Vote struct {
 	Point        int
 	ResourceID   uint `orm:"column(resource_id)"`
 	ResourceType string
-	UpdatedAt    time.Time `json:"updatedAt"`
-	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt    time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -184,7 +182,7 @@ type LeaveWord struct {
 	ID        uint      `orm:"column(id)" json:"id"`
 	Body      string    `json:"body"`
 	Type      string    `json:"type"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -199,8 +197,8 @@ type Link struct {
 	Href      string    `json:"href"`
 	Label     string    `json:"label"`
 	SortOrder int       `json:"sortOrder"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -219,8 +217,8 @@ type Card struct {
 	Logo      string    `json:"logo"`
 	SortOrder int       `json:"sortOrder"`
 	Action    string    `json:"action"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -235,8 +233,8 @@ type FriendLink struct {
 	Home      string    `json:"home"`
 	Logo      string    `json:"logo"`
 	SortOrder int       `json:"sortOrder"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name

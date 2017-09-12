@@ -6,7 +6,6 @@ CREATE TABLE users (
   password           bytea,
   provider_id        VARCHAR(255)                NOT NULL,
   provider_type      VARCHAR(32)                 NOT NULL,
-  home               VARCHAR(255),
   logo               VARCHAR(255),
   sign_in_count      INT                         NOT NULL DEFAULT 0,
   current_sign_in_at TIMESTAMP WITHOUT TIME ZONE,
@@ -35,13 +34,10 @@ CREATE INDEX idx_users_provider_type
 CREATE TABLE logs (
   id         BIGSERIAL PRIMARY KEY,
   user_id    BIGINT                      REFERENCES users,
-  type       VARCHAR(8)                  NOT NULL DEFAULT 'info',
   ip         INET                        NOT NULL,
   message    VARCHAR(255)                NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
 );
-CREATE INDEX idx_logs_type
-  ON logs (type);
 
 CREATE TABLE roles (
   id            BIGSERIAL PRIMARY KEY,

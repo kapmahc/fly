@@ -21,8 +21,8 @@ type Book struct {
 	Description string    `json:"description"`
 	PublishedAt time.Time `json:"publishedAt"`
 	Cover       string    `json:"cover"`
-	UpdatedAt   time.Time `json:"updatedAt"`
-	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt   time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -35,8 +35,8 @@ type Note struct {
 	ID        uint `orm:"column(id)" json:"id"`
 	Type      string
 	Body      string
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	User *nut.User `orm:"rel(fk)"`
 	Book *Book     `orm:"rel(fk)"`

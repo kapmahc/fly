@@ -23,13 +23,36 @@ type Locale struct {
 	Lang      string    `json:"lang"`
 	Code      string    `json:"code"`
 	Message   string    `json:"message"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
 }
 
 // TableName table name
 func (*Locale) TableName() string {
 	return "locales"
+}
+
+// SetLocale set locale info in database
+func SetLocale(lang, code, message string) error {
+	var it Locale
+	o := orm.NewOrm()
+	err := o.QueryTable(&it).
+		Filter("lang", lang).
+		Filter("code", code).
+		One(&it, "id")
+
+	if err == nil {
+		_, err = o.QueryTable(&it).Filter("id", it.ID).Update(orm.Params{
+			"message":    message,
+			"updated_at": time.Now(),
+		})
+	} else if err == orm.ErrNoRows {
+		it.Lang = lang
+		it.Code = code
+		it.Message = message
+		_, err = o.Insert(&it)
+	}
+	return err
 }
 
 // LoadLocales load locales

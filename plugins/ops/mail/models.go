@@ -17,8 +17,8 @@ import (
 type Domain struct {
 	ID        uint `orm:"column(id)" json:"id"`
 	Name      string
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 }
 
 // TableName table name
@@ -34,8 +34,8 @@ type User struct {
 	Password string
 	Enable   bool
 
-	UpdatedAt time.Time `json:"updatedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	Domain *Domain `orm:"rel(fk)"`
 }
@@ -76,8 +76,8 @@ type Alias struct {
 	ID          uint `orm:"column(id)" json:"id"`
 	Source      string
 	Destination string
-	UpdatedAt   time.Time `json:"updatedAt"`
-	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt   time.Time `orm:"auto_now_add" json:"createdAt"`
 
 	Domain *Domain `orm:"rel(fk)"`
 }
