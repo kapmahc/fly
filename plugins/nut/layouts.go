@@ -34,7 +34,7 @@ func (p *Controller) Redirect(name string, args ...interface{}) {
 // HomeURL home url
 func (p *Controller) HomeURL() string {
 	req := p.Ctx.Request
-	scheme := "https"
+	scheme := "http"
 	if p.Ctx.Request.TLS != nil {
 		scheme = scheme + "s"
 	}

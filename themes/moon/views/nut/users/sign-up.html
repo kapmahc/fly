@@ -1,9 +1,9 @@
 <div class="row justify-content-md-center">
   <div class="col-md-6">
     {{template "layouts/application/flash.html" .}}
-    <h2>{{t .locale "nut.users.sign-up.title"}}</h2>
+    <h2>{{.title}}</h2>
     <hr/>
-    <form method="post">
+    <form method="post" data-confirm="{{t .locale "helpers.are-you-sure"}}">
       <div class="form-group">
         <label for="name">{{t .locale "attributes.username"}}</label>
         <input type="text" class="form-control" id="name" name="name">
@@ -25,5 +25,7 @@
       </div>
       {{template "layouts/application/form-buttons.html" .}}
     </form>
+    <br/>
+    {{template "nut/users/shared-links.html" .}}
   </div>
 </div>

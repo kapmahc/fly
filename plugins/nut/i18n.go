@@ -2,6 +2,7 @@ package nut
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"html/template"
 	"os"
@@ -103,6 +104,14 @@ func Th(lang, code string, obj interface{}) (string, error) {
 		return "", err
 	}
 	return buf.String(), nil
+}
+
+// Te translate content to target language. (error)
+func Te(lang, code string, args ...interface{}) error {
+	if msg, err := GetLocale(lang, code); err == nil {
+		return fmt.Errorf(msg, args...)
+	}
+	return errors.New(i18n.Tr(lang, code, args...))
 }
 
 // Tr translate content to target language.

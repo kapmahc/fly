@@ -8,8 +8,8 @@ import (
 )
 
 // SignIn set sign-in info
-func SignIn(o orm.Ormer, lang, email, password, ip string) (*User, error) {
-	user, err := GetByEmail(email)
+func SignIn(o orm.Ormer, lang, ip, email, password string) (*User, error) {
+	user, err := GetUserByEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +59,8 @@ func GetUserByUID(uid string) (*User, error) {
 	return &u, nil
 }
 
-// GetByEmail get user by email
-func GetByEmail(email string) (*User, error) {
+// GetUserByEmail get user by email
+func GetUserByEmail(email string) (*User, error) {
 	var user User
 	if err := orm.NewOrm().QueryTable(&user).
 		Filter("provider_type", UserTypeEmail).
@@ -279,4 +279,15 @@ func confirmUser(o orm.Ormer, lang, ip string, user *User) error {
 		return err
 	}
 	return AddLog(o, user, ip, Tr(lang, "nut.logs.user.confirm"))
+}
+
+func setUserPassword(o orm.Ormer, lang, ip string, user *User, password string) error {
+	now := time.Now()
+	if _, err := o.QueryTable(user).Filter("id", user.ID).Update(orm.Params{
+		"password":   string(HMAC().Sum([]byte(password))),
+		"updated_at": now,
+	}); err != nil {
+		return err
+	}
+	return AddLog(o, user, ip, Tr(lang, "nut.logs.user.change-password"))
 }

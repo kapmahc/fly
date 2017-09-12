@@ -3,14 +3,10 @@
     {{template "layouts/application/flash.html" .}}
     <h2>{{.title}}</h2>
     <hr/>
-    <form method="post">
+    <form method="post" data-confirm="{{t .locale "helpers.are-you-sure"}}">
       <div class="form-group">
         <label for="email">{{t .locale "attributes.email"}}</label>
         <input type="email" class="form-control" id="email" name="email">        
-      </div>
-      <div class="form-group">
-        <label for="password">{{t .locale "attributes.password"}}</label>
-        <input type="password" class="form-control" id="password" name="password">
       </div>
       {{template "layouts/application/form-buttons.html" .}}
     </form>
