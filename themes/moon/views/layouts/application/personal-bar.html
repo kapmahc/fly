@@ -1,0 +1,31 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="personal-bar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{if .currentUser}}{{t .locale "personal-bar.welcome" .currentUser.Name}}{{else}}{{t .locale "personal-bar.sign-in-or-up"}}{{end}}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="personal-bar">
+    {{if .currentUser}}
+    <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetDashboard"}}">{{t .locale "personal-bar.dashboard"}}</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" data-next="/" data-method="delete" href="{{urlfor "nut.Plugin.DeleteUsersSignOut"}}" data-confirm="{{t .locale "helpers.are-you-sure"}}" rel="nofollow">{{t .locale "personal-bar.sign-out"}}</a>
+    {{else}}
+    <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetUsersSignIn" }}">
+      {{t .locale "nut.users.sign-in.title"}}
+    </a>
+    <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetUsersSignUp" }}">
+      {{t .locale "nut.users.sign-up.title"}}
+    </a>
+    <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetUsersConfirm" }}">
+      {{t .locale "nut.users.confirm.title"}}
+    </a>
+    <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetUsersUnlock" }}">
+      {{t .locale "nut.users.unlock.title"}}
+    </a>
+    <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetUsersForgotPassword" }}">
+      {{t .locale "nut.users.forgot-password.title"}}
+    </a>
+    <a class="dropdown-item" href="{{urlfor "nut.Plugin.NewLeaveWord" }}">
+      {{t .locale "nut.leave-words.new.title"}}
+    </a>
+    {{end}}
+  </div>
+</li>

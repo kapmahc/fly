@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
 	"github.com/beego/i18n"
 )
@@ -16,14 +17,24 @@ import (
 type Controller struct {
 	beego.Controller
 
-	locale  string
-	user    *User
-	isAdmin bool
+	locale      string
+	currentUser *User
+	isAdmin     bool
 }
 
 // Locale get current locale
 func (p *Controller) Locale() string {
 	return p.locale
+}
+
+// CurrentUser get current user
+func (p *Controller) CurrentUser() *User {
+	return p.currentUser
+}
+
+// IsAdmin current user is admin?
+func (p *Controller) IsAdmin() bool {
+	return p.isAdmin
 }
 
 // Redirect http 302 redirect
@@ -61,8 +72,14 @@ func (p *Controller) Flash(fn func() string, er error) bool {
 // Prepare prepare
 func (p *Controller) Prepare() {
 	beego.ReadFromRequest(&p.Controller)
-	p.Data["xsrf"] = template.HTML(p.XSRFFormHTML())
+	p.setXSRF()
 	p.detectLocale()
+	p.parseUserFromRequest()
+}
+
+func (p *Controller) setXSRF() {
+	p.Data["xsrf_input"] = template.HTML(p.XSRFFormHTML())
+	p.Data["xsrf_token"] = p.XSRFToken()
 }
 
 // ParseForm parse form
@@ -146,46 +163,35 @@ func (p *Controller) LayoutDashboard() {
 	p.Layout = "layouts/dashboard/index.html"
 }
 
-// func (p *Controller) parseUserFromRequest() {
-// 	cm, err := JWT().ParseFromRequest(p.Ctx.Request)
-// 	if err != nil {
-// 		return
-// 	}
-// 	user, err := GetUserByUID(cm.Get(UID).(string))
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	if !user.IsConfirm() {
-// 		return nil, E(lng, "auth.errors.user.not-confirm")
-// 	}
-// 	if user.IsLock() {
-// 		return nil, E(lng, "auth.errors.user.is-lock")
-// 	}
-// 	return user, nil
-// }
-//
-// func (p *Controller) parseCurrentUser() error {
-// 	if user, err := JWT().getUserFromRequest(c); err == nil {
-// 		c.Set(CurrentUser, user)
-// 		c.Set(IsAdmin, Is(user.ID, RoleAdmin))
-// 	}
-// 	return nil
-// }
-//
-// // MustSignIn must-sign-in
-// func (p *Controller) MustSignIn() error {
-// 	if _, ok := c.MustGet(CurrentUser).(*User); ok {
-// 		return nil
-// 	}
-// 	lng := c.MustGet(key).(string)
-// 	return E(lng, "auth.errors.please-sign-in")
-// }
-//
-// // MustAdminMiddleware must has admin role
-// func (p *Controller) MustAdmin() error {
-// 	if is, ok := c.MustGet(IsAdmin).(bool); ok && is {
-// 		return nil
-// 	}
-// 	lng := c.MustGet(key).(string)
-// 	return E(lng, "errors.not-allow")
-// }
+func (p *Controller) parseUserFromRequest() {
+	uid, ok := p.GetSession("uid").(string)
+	if !ok {
+		return
+	}
+	user, err := GetUserByUID(uid)
+	if err != nil {
+		return
+	}
+
+	if !user.IsConfirm() || user.IsLock() {
+		return
+	}
+	p.currentUser = user
+	p.isAdmin = Is(orm.NewOrm(), user.ID, RoleAdmin)
+	p.Data["currentUser"] = user
+	p.Data["isAdmin"] = p.isAdmin
+}
+
+// MustSignIn must-sign-in
+func (p *Controller) MustSignIn() {
+	if p.currentUser == nil {
+		p.Abort(http.StatusForbidden, Te(p.locale, "nut.errors.user.please-sign-in"))
+	}
+}
+
+// MustAdmin must has admin role
+func (p *Controller) MustAdmin() {
+	if !p.isAdmin {
+		p.Abort(http.StatusForbidden, Te(p.locale, "errors.not-allow"))
+	}
+}

@@ -6,12 +6,11 @@ import (
 	"net/http"
 	"time"
 
-	"golang.org/x/text/language"
-
 	"github.com/SermoDigital/jose/jws"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
+	"golang.org/x/text/language"
 	gomail "gopkg.in/gomail.v2"
 )
 
@@ -50,7 +49,7 @@ func (p *Plugin) PostUsersSignIn() {
 
 	var user *User
 	if err == nil {
-		user, err = SignIn(o, p.Ctx.Input.IP(), lang, fm.Email, fm.Password)
+		user, err = SignIn(o, lang, p.Ctx.Input.IP(), fm.Email, fm.Password)
 	}
 	if err == nil {
 		o.Commit()
