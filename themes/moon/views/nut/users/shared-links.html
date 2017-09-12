@@ -1,7 +1,26 @@
 <div class="list-group">
-  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersSignIn" }}">{{t .locale "nut.users.sign-in.title"}}</a>
-  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersSignUp" }}">{{t .locale "nut.users.sign-up.title"}}</a>
-  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersConfirm" }}">{{t .locale "nut.users.confirm.title"}}</a>
-  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersUnlock" }}">{{t .locale "nut.users.unlock.title"}}</a>
-  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersForgotPassword" }}">{{t .locale "nut.users.forgot-password.title"}}</a>
+  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersSignIn" }}">
+    <i class="fa fa-sign-in" aria-hidden="true"></i>
+    {{t .locale "nut.users.sign-in.title"}}
+  </a>
+  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersSignUp" }}">
+    <i class="fa fa-user-plus" aria-hidden="true"></i>
+    {{t .locale "nut.users.sign-up.title"}}
+  </a>
+  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersConfirm" }}">
+    <i class="fa fa-check-square" aria-hidden="true"></i>
+    {{t .locale "nut.users.confirm.title"}}
+  </a>
+  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersUnlock" }}">
+    <i class="fa fa-unlock" aria-hidden="true"></i>
+    {{t .locale "nut.users.unlock.title"}}
+  </a>
+  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.GetUsersForgotPassword" }}">
+    <i class="fa fa-key" aria-hidden="true"></i>
+    {{t .locale "nut.users.forgot-password.title"}}
+  </a>
+  <a class="list-group-item list-group-item-action" href="{{urlfor "nut.Plugin.NewLeaveWord" }}">    
+    <i class="fa fa-commenting" aria-hidden="true"></i>
+    {{t .locale "nut.leave-words.new.title"}}
+  </a>
 </div>
