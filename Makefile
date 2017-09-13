@@ -20,8 +20,17 @@ const (
 
 endef
 
-build: ANNOUNCE.txt
-	bee pack -v -ba="-ldflags '-s'" -exp=tmp:node_modules:.git -exs=.un~:.swp:.tmp:.go:Makefile
+
+build: frontend backend
+	tar -uf fly.tar.gz dashboard/build
+
+
+frontend:
+	cd dashboard && npm run build
+
+
+backend: ANNOUNCE.txt
+	bee pack -v -ba="-ldflags '-s'" -exp=tmp:node_modules:dashboard:.git -exs=.un~:.swp:.tmp:.go:Makefile
 
 
 
@@ -33,4 +42,4 @@ ANNOUNCE.txt:
 
 
 clean:
-	-rm -rv $(dst) $(dst).tar.gz lastupdate.tmp routers/commentsRouter_*.go
+	-rm -rv $(dst) $(dst).tar.gz lastupdate.tmp routers/commentsRouter_*.go dashboard/build
