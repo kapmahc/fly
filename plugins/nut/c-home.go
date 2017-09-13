@@ -11,7 +11,6 @@ func (p *Plugin) GetHome() {
 // GetDashboard dashboard panel
 // @router /dashboard [get]
 func (p *Plugin) GetDashboard() {
-	p.MustSignIn()
 	p.LayoutDashboard()
 	p.Data[TITLE] = Tr(p.Locale(), "nut.dashboard.title")
 	p.TplName = "nut/dashboard.html"
