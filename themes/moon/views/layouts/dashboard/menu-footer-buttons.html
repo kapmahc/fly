@@ -1,14 +1,14 @@
 <div class="sidebar-footer hidden-small">
-  <a data-toggle="tooltip" data-placement="top" title="Settings">
+  <a data-toggle="tooltip" data-placement="top" title="{{t .locale "menu-footer-buttons.settings"}}" href="{{urlfor "nut.Plugin.GetDashboard"}}">
     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
   </a>
-  <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+  <a data-toggle="tooltip" data-placement="top" title="{{t .locale "menu-footer-buttons.full-screen"}}">
     <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
   </a>
-  <a data-toggle="tooltip" data-placement="top" title="Lock">
+  <a data-toggle="tooltip" data-placement="top" title="{{t .locale "menu-footer-buttons.lock"}}">
     <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
   </a>
-  <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+  <a data-toggle="tooltip" data-placement="top" title="{{t .locale "menu-footer-buttons.sign-out"}}" data-next="/" data-method="delete" href="{{urlfor "nut.Plugin.DeleteUsersSignOut"}}" data-confirm="{{t .locale "helpers.are-you-sure"}}" rel="nofollow">
     <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
   </a>
 </div>

@@ -1,6 +1,10 @@
+{{$locale := .locale}}
 <footer>
   <div class="pull-right">
-    Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+    &copy;{{t .locale "site.copyright"}}
+    {{range .languages}}
+    <a href="{{urlfor "nut.Plugin.GetDashboard" "locale" .}}">{{t $locale (printf "languages.%s" .)}}</a>
+    {{end}}
   </div>
   <div class="clearfix"></div>
 </footer>
