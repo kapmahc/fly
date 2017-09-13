@@ -6,7 +6,7 @@
     {{if .currentUser}}
     <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetDashboard"}}">{{t .locale "nut.dashboard.title"}}</a>
     <div class="dropdown-divider"></div>
-    <a class="dropdown-item" data-next="/" data-method="delete" href="{{urlfor "nut.Plugin.DeleteUsersSignOut"}}" data-confirm="{{t .locale "helpers.are-you-sure"}}" rel="nofollow">{{t .locale "personal-bar.sign-out"}}</a>
+    <a class="dropdown-item" data-next="/" data-method="delete" href="{{urlfor "nut.Plugin.DeleteUsersSignOut"}}" data-confirm="{{t .locale "helpers.are-you-sure"}}" rel="nofollow">{{t .locale "nut.users.sign-out.title"}}</a>
     {{else}}
     <a class="dropdown-item" href="{{urlfor "nut.Plugin.GetUsersSignIn" }}">
       {{t .locale "nut.users.sign-in.title"}}

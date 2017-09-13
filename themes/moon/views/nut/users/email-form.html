@@ -6,11 +6,11 @@
     <form method="post" data-confirm="{{t .locale "helpers.are-you-sure"}}">
       <div class="form-group">
         <label for="email">{{t .locale "attributes.email"}}</label>
-        <input type="email" class="form-control" id="email" name="email">        
+        <input type="email" class="form-control" id="email" name="email">
       </div>
       {{template "layouts/application/form-buttons.html" .}}
     </form>
     <br/>
-    {{template "nut/users/shared-links.html" .}}
+    {{template "nut/users/_shared-links.html" .}}
   </div>
 </div>

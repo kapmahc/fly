@@ -12,15 +12,14 @@
             <span class=" fa fa-angle-down"></span>
           </a>
           <ul class="dropdown-menu dropdown-usermenu pull-right">
-            <li><a href="javascript:;"> Profile</a></li>
+            <li><a href="{{urlfor "nut.Plugin.GetUsersProfile"}}"> {{t .locale "nut.users.profile.title"}}</a></li>
             <li>
-              <a href="javascript:;">
+              <a href="{{urlfor "nut.Plugin.GetDashboard"}}">
                 <span class="badge bg-red pull-right">50%</span>
-                <span>Settings</span>
+                <span>{{t .locale "nut.admin.index.title"}}</span>
               </a>
             </li>
-            <li><a href="javascript:;">Help</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+            <li><a data-next="/" data-method="delete" href="{{urlfor "nut.Plugin.DeleteUsersSignOut"}}" data-confirm="{{t .locale "helpers.are-you-sure"}}" rel="nofollow"><i class="fa fa-sign-out pull-right"></i> {{t .locale "nut.users.sign-out.title"}}</a></li>
           </ul>
         </li>
 

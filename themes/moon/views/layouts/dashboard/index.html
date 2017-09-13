@@ -12,8 +12,7 @@
       <div class="main_container">
         {{template "layouts/dashboard/left-navigation.html" .}}
         {{template "layouts/dashboard/top-navigation.html" .}}
-        <div class="right_col" role="main">
-          {{template "layouts/dashboard/top-tiles.html" .}}
+        <div class="right_col" role="main">          
           {{.LayoutContent}}
         </div>
         {{template "layouts/dashboard/footer.html" .}}
