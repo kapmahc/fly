@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
-
+import {FormattedMessage} from 'react-intl'
 class Widget extends Component {
   render() {
     return (
-      <div>home</div>
+      <div>home
+        <FormattedMessage id="buttons.submit"/>
+      </div>
     )
   }
 }
