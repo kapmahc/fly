@@ -26,8 +26,8 @@ CREATE INDEX idx_reading_books_lang
 
 CREATE TABLE reading_notes (
   id         BIGSERIAL PRIMARY KEY,
-  user_id    BIGINT                      REFERENCES users,
-  book_id    BIGINT                      REFERENCES reading_books,
+  user_id    BIGINT                      NOT NULL REFERENCES users,
+  book_id    BIGINT                      NOT NULL REFERENCES reading_books,
   body       TEXT                        NOT NULL,
   type       VARCHAR(8)                  NOT NULL DEFAULT 'markdown',
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),

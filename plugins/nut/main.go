@@ -9,8 +9,6 @@ import (
 	"path"
 	"time"
 
-	"golang.org/x/text/language"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
@@ -18,6 +16,7 @@ import (
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/postgres"
 	"github.com/urfave/cli"
+	"golang.org/x/text/language"
 )
 
 // Main entry
@@ -83,7 +82,7 @@ func Main(args ...string) error {
 				{
 					Name:    "drop",
 					Usage:   "drop everyting inside database",
-					Aliases: []string{"c"},
+					Aliases: []string{"d"},
 					Action: migrateAction(func(_ *cli.Context, mig *migrate.Migrate) error {
 						return mig.Drop()
 					}),

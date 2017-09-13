@@ -33,10 +33,21 @@ CREATE INDEX idx_users_provider_type
 
 CREATE TABLE logs (
   id         BIGSERIAL PRIMARY KEY,
-  user_id    BIGINT                      REFERENCES users,
+  user_id    BIGINT                      NOT NULL REFERENCES users,
   ip         INET                        NOT NULL,
   message    VARCHAR(255)                NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
+);
+
+CREATE TABLE notices (
+  id         BIGSERIAL PRIMARY KEY,
+  from_id    BIGINT                      NOT NULL REFERENCES users,
+  to_id      BIGINT                      NOT NULL REFERENCES users,
+  subject    VARCHAR(255)                NOT NULL,
+  body       VARCHAR(1024)                NOT NULL,
+  type       VARCHAR(8)                NOT NULL,
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
 CREATE TABLE roles (
@@ -56,8 +67,8 @@ CREATE INDEX idx_roles_resource_type
 
 CREATE TABLE policies (
   id         BIGSERIAL PRIMARY KEY,
-  user_id    BIGINT                      REFERENCES users,
-  role_id    BIGINT                      REFERENCES roles,
+  user_id    BIGINT                      NOT NULL REFERENCES users,
+  role_id    BIGINT                      NOT NULL REFERENCES roles,
   start_up   DATE                        NOT NULL DEFAULT current_date,
   shut_down  DATE                        NOT NULL DEFAULT '2016-12-13',
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
@@ -89,7 +100,7 @@ CREATE TABLE attachments (
   media_type    VARCHAR(32)                 NOT NULL,
   resource_type VARCHAR(255)                NOT NULL,
   resource_id   BIGINT                      NOT NULL,
-  user_id       BIGINT                      REFERENCES users,
+  user_id       BIGINT                      NOT NULL REFERENCES users,
   created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );

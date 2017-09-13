@@ -242,10 +242,30 @@ func (*FriendLink) TableName() string {
 	return "friend_links"
 }
 
+// Notice notice
+type Notice struct {
+	ID        uint      `orm:"column(id)" json:"id"`
+	Subject   string    `json:"subject"`
+	Body      string    `json:"body"`
+	Type      string    `json:"type"`
+	Read      bool      `json:"read"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
+	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
+
+	From *User `orm:"rel(fk)"`
+	To   *User `orm:"rel(fk)"`
+}
+
+// TableName table name
+func (*Notice) TableName() string {
+	return "notices"
+}
+
 func init() {
 	orm.RegisterModel(
 		new(User), new(Log), new(Role), new(Policy),
-		new(Attachment), new(Vote), new(LeaveWord), new(FriendLink),
+		new(Attachment), new(Vote), new(Notice),
+		new(LeaveWord), new(FriendLink),
 		new(Card), new(Link),
 	)
 }

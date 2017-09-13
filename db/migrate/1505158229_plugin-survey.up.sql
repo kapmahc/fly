@@ -21,7 +21,7 @@ CREATE TABLE survey_fields (
   body       TEXT                        NOT NULL,
   type       VARCHAR(16)                 NOT NULL DEFAULT 'text',
   required   BOOLEAN                     NOT NULL DEFAULT TRUE,
-  form_id    BIGINT                      REFERENCES survey_forms,
+  form_id    BIGINT                      NOT NULL REFERENCES survey_forms,
   sort_order INT                         NOT NULL DEFAULT 0,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
@@ -32,7 +32,7 @@ CREATE UNIQUE INDEX idx_survey_fields_name_form_id
 CREATE TABLE survey_records (
   id         BIGSERIAL PRIMARY KEY,
   value      TEXT                        NOT NULL,
-  form_id    BIGINT                      REFERENCES survey_forms,
+  form_id    BIGINT                      NOT NULL REFERENCES survey_forms,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );

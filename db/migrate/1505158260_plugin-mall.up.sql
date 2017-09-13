@@ -7,7 +7,7 @@ CREATE TABLE mall_addresses (
   state VARCHAR(32) NOT NULL,
   country VARCHAR(32) NOT NULL,
   phone VARCHAR(32) NOT NULL,
-  user_id BIGINT REFERENCES users,
+  user_id BIGINT NOT NULL REFERENCES users,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
@@ -23,8 +23,8 @@ CREATE TABLE mall_stores (
   name VARCHAR(255) NOT NULL,
   type VARCHAR(8) NOT NULL,
   description TEXT NOT NULL,
-  address_id BIGINT REFERENCES mall_addresses,
-  owner_id BIGINT REFERENCES users,
+  address_id BIGINT NOT NULL REFERENCES mall_addresses,
+  owner_id BIGINT NOT NULL REFERENCES users,
   currency CHAR(3) NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
@@ -46,7 +46,7 @@ CREATE TABLE mall_vendors (
   name VARCHAR(255) NOT NULL,
   type VARCHAR(8) NOT NULL,
   description TEXT NOT NULL,
-  stores_id BIGINT REFERENCES mall_stores,
+  stores_id BIGINT NOT NULL REFERENCES mall_stores,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
@@ -56,29 +56,29 @@ CREATE TABLE mall_products (
   name VARCHAR(255) NOT NULL,
   type VARCHAR(8) NOT NULL,
   description TEXT NOT NULL,
-  vendor_id BIGINT REFERENCES mall_vendors,
-  stores_id BIGINT REFERENCES mall_stores,
+  vendor_id BIGINT NOT NULL REFERENCES mall_vendors,
+  stores_id BIGINT NOT NULL REFERENCES mall_stores,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
 CREATE TABLE mall_products_tags (
-  tag_id BIGINT REFERENCES mall_tags ON DELETE CASCADE,
-  product_id     BIGINT REFERENCES mall_products ON DELETE CASCADE,
+  tag_id BIGINT NOT NULL REFERENCES mall_tags ON DELETE CASCADE,
+  product_id     BIGINT NOT NULL REFERENCES mall_products ON DELETE CASCADE,
   PRIMARY KEY (product_id, tag_id)
 );
 
 CREATE TABLE mall_variants(
   id BIGSERIAL PRIMARY KEY,
   sku VARCHAR(64) NOT NULL,
-  product_id BIGINT REFERENCES mall_products,
+  product_id BIGINT NOT NULL REFERENCES mall_products,
   price NUMERIC(12,2) NOT NULL,
   cost NUMERIC(12,2) NOT NULL,
   weight NUMERIC(12,2) NOT NULL,
   height NUMERIC(12,2) NOT NULL,
   width NUMERIC(12,2) NOT NULL,
   length NUMERIC(12,2) NOT NULL,
-  stores_id BIGINT REFERENCES mall_stores,
+  stores_id BIGINT NOT NULL REFERENCES mall_stores,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
@@ -89,17 +89,17 @@ CREATE TABLE mall_journals (
   id BIGSERIAL PRIMARY KEY,
   action VARCHAR(255) NOT NULL,
   quantity BIGINT NOT NULL,
-  store_id BIGINT REFERENCES mall_stores,
-  variant_id  BIGINT REFERENCES mall_variants,
-  user_id BIGINT REFERENCES users,
+  store_id BIGINT NOT NULL REFERENCES mall_stores,
+  variant_id  BIGINT NOT NULL REFERENCES mall_variants,
+  user_id BIGINT NOT NULL REFERENCES users,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE mall_stocks (
   id BIGSERIAL PRIMARY KEY,
   quantity BIGINT NOT NULL,
-  store_id BIGINT REFERENCES mall_stores,
-  variant_id  BIGINT REFERENCES mall_variants,
+  store_id BIGINT NOT NULL REFERENCES mall_stores,
+  variant_id  BIGINT NOT NULL REFERENCES mall_variants,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
@@ -108,7 +108,7 @@ CREATE TABLE mall_properties (
   id BIGSERIAL PRIMARY KEY,
   key VARCHAR(255) NOT NULL,
   val VARCHAR(2048) NOT NULL,
-  variant_id BIGINT REFERENCES mall_variants,
+  variant_id BIGINT NOT NULL REFERENCES mall_variants,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
