@@ -6,11 +6,13 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
 	"github.com/beego/i18n"
+	"github.com/kapmahc/fly/plugins/nut/timeago"
 )
 
 // Controller base controller
@@ -160,6 +162,18 @@ func (p *Controller) LayoutApplication() {
 // LayoutDashboard use dashboard layout
 func (p *Controller) LayoutDashboard() {
 	p.MustSignIn()
+	// TODO
+	var notices []Notice
+	for i := 1; i <= 3; i++ {
+		notices = append(notices, Notice{
+			From:      &User{Logo: "/assets/person.jpg", Name: "who-am-i"},
+			Subject:   fmt.Sprintf("Subject %d", 1),
+			Body:      fmt.Sprintf("Body %d", 1),
+			UpdatedAt: time.Now().Add(time.Hour * time.Duration(i*-1)),
+		})
+	}
+	p.Data["notices"] = notices
+
 	p.Layout = "layouts/dashboard/index.html"
 }
 
@@ -194,4 +208,8 @@ func (p *Controller) MustAdmin() {
 	if !p.isAdmin {
 		p.Abort(http.StatusForbidden, Te(p.locale, "errors.not-allow"))
 	}
+}
+
+func init() {
+	beego.AddFuncMap("timeago", timeago.FromTime)
 }

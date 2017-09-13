@@ -27,61 +27,27 @@
         <li role="presentation" class="dropdown">
           <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-envelope-o"></i>
-            <span class="badge bg-green">6</span>
+            <span class="badge bg-green">{{.notices|len}}</span>
           </a>
           <ul id="notices-menu" class="dropdown-menu list-unstyled msg_list" role="menu">
+            {{range .notices}}
             <li>
               <a>
-                <span class="image"><img src="/assets/img.jpg" alt="Profile Image" /></span>
+                <span class="image"><img src="{{.From.Logo}}" alt="Profile Image" /></span>
                 <span>
-                  <span>John Smith</span>
-                  <span class="time">3 mins ago</span>
+                  <span>{{.From.Name}}</span>
+                  <span class="time">{{timeago .UpdatedAt}}</span>
                 </span>
                 <span class="message">
-                  Film festivals used to be do-or-die moments for movie makers. They were where...
+                  {{.Body}}
                 </span>
               </a>
             </li>
-            <li>
-              <a>
-                <span class="image"><img src="/assets/img.jpg" alt="Profile Image" /></span>
-                <span>
-                  <span>John Smith</span>
-                  <span class="time">3 mins ago</span>
-                </span>
-                <span class="message">
-                  Film festivals used to be do-or-die moments for movie makers. They were where...
-                </span>
-              </a>
-            </li>
-            <li>
-              <a>
-                <span class="image"><img src="/assets/img.jpg" alt="Profile Image" /></span>
-                <span>
-                  <span>John Smith</span>
-                  <span class="time">3 mins ago</span>
-                </span>
-                <span class="message">
-                  Film festivals used to be do-or-die moments for movie makers. They were where...
-                </span>
-              </a>
-            </li>
-            <li>
-              <a>
-                <span class="image"><img src="/assets/img.jpg" alt="Profile Image" /></span>
-                <span>
-                  <span>John Smith</span>
-                  <span class="time">3 mins ago</span>
-                </span>
-                <span class="message">
-                  Film festivals used to be do-or-die moments for movie makers. They were where...
-                </span>
-              </a>
-            </li>
+            {{end}}
             <li>
               <div class="text-center">
                 <a>
-                  <strong>See All Alerts</strong>
+                  <strong>{{t .locale "top-navigation.more"}}</strong>
                   <i class="fa fa-angle-right"></i>
                 </a>
               </div>
