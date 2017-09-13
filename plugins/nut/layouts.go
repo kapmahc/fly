@@ -157,9 +157,21 @@ func (p *Controller) LayoutApplication() {
 	p.Layout = "layouts/application/index.html"
 }
 
+// Panel panel
+type Panel struct {
+	Title string
+	Items []A
+}
+
+// A a link
+type A struct {
+	Href  string
+	Label string
+}
+
 // LayoutDashboard use dashboard layout
 func (p *Controller) LayoutDashboard() {
-	// TODO
+
 	p.Layout = "layouts/dashboard/index.html"
 }
 

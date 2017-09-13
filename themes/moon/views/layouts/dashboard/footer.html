@@ -1,0 +1,41 @@
+{{$locale := .locale}}
+<footer class="page-footer orange">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="white-text">{{t .locale "footer.card.title"}}</h5>
+        <p class="grey-text text-lighten-4">
+          {{t .locale "footer.card.body"}}
+        </p>
+      </div>
+      <div class="col l3 s12">
+        <h5 class="white-text">{{t .locale "footer.menus.title"}}</h5>
+        <ul>
+          <li><a class="grey-text text-lighten-3" href="{{urlfor "nut.Plugin"}}">{{t $locale "nut.self.dashboard.title"}}</a></li>
+          {{if .isAdmin}}
+          <li><a class="grey-text text-lighten-3" href="{{urlfor "nut.Plugin"}}">{{t $locale "nut.admin.dashboard.title"}}</a></li>
+          {{end}}
+          <li><a class="grey-text text-lighten-3" href="{{urlfor "nut.Plugin"}}">{{t $locale "forum.dashboard.title"}}</a></li>
+          <li><a class="grey-text text-lighten-3" href="{{urlfor "nut.Plugin"}}">{{t $locale "reading.dashboard.title"}}</a></li>
+          <li><a class="grey-text text-lighten-3" href="{{urlfor "nut.Plugin"}}">{{t $locale "survey.dashboard.title"}}</a></li>
+        </ul>
+      </div>
+      <div class="col l3 s12">
+        <h5 class="white-text">{{t .locale "footer.others"}}</h5>
+        <ul>
+          {{range .languages}}
+          <li><a class="grey-text text-lighten-3" href="{{urlfor "nut.Plugin.GetDashboard" "locale" .}}">{{t $locale (printf "languages.%s" .)}}</a></li>
+          {{end}}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+      ©{{t .locale "site.copyright"}}
+      <a class="grey-text text-lighten-4 right" href="/" target="_blank">
+        {{t .locale "footer.more"}}
+      </a>
+    </div>
+  </div>
+</footer>

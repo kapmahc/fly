@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{.locale}}">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {{template "layouts/meta.html" .}}
+    {{assets_css "/3rd/material-design-icons/iconfont/material-icons.css"}}    
+    <link href="/3rd/materialize-css/dist/css/materialize.min.css" rel="stylesheet" media="screen,projection"/>
+    {{assets_css "/assets/dashboard.css"}}
+    {{assets_js "/3rd/jquery/dist/jquery.min.js"}}
+    {{assets_js "/3rd/materialize-css/dist/js/materialize.min.js"}}
+    {{assets_js "/assets/main.js"}}
+  </head>
+  <body>
+    {{template "layouts/dashboard/header.html" .}}
+    {{.LayoutContent}}
+    {{template "layouts/dashboard/footer.html" .}}
+  </body>
+</html>

@@ -1,18 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{.locale}}">
   <head>
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="{{t .locale "site.description"}}">
-    <meta name="keywords" content="{{t .locale "site.keywords"}}">
-    <meta name="author" content="{{t .locale "site.author.name"}}<{{t .locale "site.author.email"}}>">
-    <meta name="_xsrf" content="{{.xsrf_token}}" />
-    <link rel="icon" type="image/png" href="/assets/favicon.png" />
-    <title>{{.title}}|{{t .locale "site.subhead"}}|{{t .locale "site.title"}}</title>
+    {{template "layouts/meta.html" .}}
     {{assets_css "/3rd/bootstrap/dist/css/bootstrap.min.css"}}
     {{assets_css "/3rd/font-awesome/css/font-awesome.min.css"}}
     {{assets_css "/assets/application.css"}}
-    {{assets_js "/3rd/jquery/dist/jquery.min.js"}}    
+    {{assets_js "/3rd/jquery/dist/jquery.min.js"}}
     {{assets_js "/3rd/popper.js/dist/umd/popper.min.js"}}
     {{assets_js "/3rd/bootstrap/dist/js/bootstrap.min.js"}}
     {{assets_js "/assets/main.js"}}
