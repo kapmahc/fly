@@ -22,7 +22,11 @@ endef
 
 
 build: frontend backend
-	tar -uf fly.tar.gz dashboard/build
+	mkdir dist
+	tar -zxf fly.tar.gz -C dist
+	-cp -r dashboard/build dist/dashboard
+	mkdir -p dist/tmp
+	cd dist && tar -jcf ../dist.tar.bz2 *
 
 
 frontend:
@@ -30,7 +34,7 @@ frontend:
 
 
 backend: ANNOUNCE.txt
-	bee pack -v -ba="-ldflags '-s'" -exp=tmp:node_modules:dashboard:.git -exs=.un~:.swp:.tmp:.go:Makefile
+	bee pack -v -ba="-ldflags '-s'" -exp=tmp:dist:node_modules:dashboard:.git -exs=.un~:.swp:.tmp:.go:Makefile
 
 
 
@@ -42,4 +46,4 @@ ANNOUNCE.txt:
 
 
 clean:
-	-rm -rv $(dst) $(dst).tar.gz lastupdate.tmp routers/commentsRouter_*.go dashboard/build
+	-rm -rv $(dst) $(dst).tar.gz lastupdate.tmp routers/commentsRouter_*.go dashboard/build dist*

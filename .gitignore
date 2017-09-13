@@ -12,4 +12,6 @@
 
 # test
 /tmp/
-/migrate
+
+# build
+/dist*
