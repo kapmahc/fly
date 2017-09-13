@@ -1,13 +1,1 @@
-{{$locale := .locale}}
-<div class="navbar-fixed">
-  <nav class="light-blue lighten-1">
-   <div class="nav-wrapper container">
-     <a href="{{urlfor "nut.Plugin.GetDashboard"}}" class="brand-logo">{{t .locale "site.subhead"}}</a>
-     <ul class="right hide-on-med-and-down">
-       <li><a href="/" target="_blank">{{t .locale "nut.home.title"}}</a></li>
-       <li><a href="{{urlfor "auth.Plugin.GetDashboard"}}">{{t .locale "nut.dashboard.title"}}</a></li>
-       <li><a data-next="/" data-method="delete" href="{{urlfor "nut.Plugin.DeleteUsersSignOut"}}" data-confirm="{{t .locale "helpers.are-you-sure"}}" rel="nofollow">{{t .locale "personal-bar.sign-out"}}</a></li>
-     </ul>
-   </div>
-  </nav>
-</div>
+<div>header</div>

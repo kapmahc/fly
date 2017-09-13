@@ -1,5 +1,13 @@
+{{$locale := .locale}}
 <hr>
 <footer>
-  <p class="float-right"><a href="#">Back to top</a></p>
-  <p>&copy; 2017 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+  <p class="float-right">
+    {{t .locale "footer.others"}}
+    {{range .languages}}
+    <a href="{{urlfor "nut.Plugin.GetHome" "locale" .}}">{{t $locale (printf "languages.%s" .)}}</a>
+    {{end}}
+  </p>
+  <p>
+    &copy;{{t .locale "site.copyright"}}
+    &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
 </footer>
