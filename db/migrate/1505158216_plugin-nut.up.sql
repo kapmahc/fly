@@ -39,17 +39,6 @@ CREATE TABLE logs (
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE TABLE notices (
-  id         BIGSERIAL PRIMARY KEY,
-  from_id    BIGINT                      NOT NULL REFERENCES users,
-  to_id      BIGINT                      NOT NULL REFERENCES users,
-  subject    VARCHAR(255)                NOT NULL,
-  body       VARCHAR(1024)                NOT NULL,
-  type       VARCHAR(8)                NOT NULL,
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
-  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);
-
 CREATE TABLE roles (
   id            BIGSERIAL PRIMARY KEY,
   name          VARCHAR(32)                 NOT NULL,

@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="{{.locale}}">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {{template "layouts/meta.html" .}}
-    {{template "layouts/dashboard/css.html" .}}
+    {{assets_css "/3rd/bootstrap/dist/css/bootstrap.min.css"}}
+    {{assets_css "/3rd/font-awesome/css/font-awesome.min.css"}}
+    {{assets_css "/assets/application.css"}}
+    {{assets_js "/3rd/jquery/dist/jquery.min.js"}}
+    {{assets_js "/3rd/popper.js/dist/umd/popper.min.js"}}
+    {{assets_js "/3rd/bootstrap/dist/js/bootstrap.min.js"}}
+    {{assets_js "/assets/main.js"}}
   </head>
-  <body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
-        {{template "layouts/dashboard/left-navigation.html" .}}
-        {{template "layouts/dashboard/top-navigation.html" .}}
-        <div class="right_col" role="main">          
-          {{.LayoutContent}}
-        </div>
-        {{template "layouts/dashboard/footer.html" .}}
-      </div>
+  <body>
+    {{template "layouts/application/header.html" .}}
+    <div class="container">
+      {{.LayoutContent}}
+      {{template "layouts/application/footer.html" .}}
     </div>
-  {{template "layouts/dashboard/js.html" .}}
   </body>
 </html>

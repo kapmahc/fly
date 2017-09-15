@@ -12,7 +12,7 @@ func SignIn(o orm.Ormer, lang, ip, email, password string) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	if HMAC().Chk([]byte(password), []byte(user.Password)) {
+	if !HMAC().Chk([]byte(password), []byte(user.Password)) {
 		AddLog(o, user, ip, Tr(lang, "nut.logs.user.sign-in.failed"))
 		return nil, Te(lang, "nut.errors.user.email-password-not-match")
 	}
