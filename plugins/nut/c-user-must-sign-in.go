@@ -1,6 +1,12 @@
 package nut
 
-import "github.com/astaxie/beego/orm"
+import (
+	"time"
+
+	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/validation"
+	"golang.org/x/text/language"
+)
 
 // GetUsersProfile users'profile
 // @router /users/profile [get]
@@ -10,12 +16,68 @@ func (p *Plugin) GetUsersProfile() {
 	p.TplName = "nut/users/profile.html"
 }
 
+type fmUserProfile struct {
+	Name string `form:"name" valid:"Required"`
+}
+
+// PostUsersProfile users'profile
+// @router /users/profile [post]
+func (p *Plugin) PostUsersProfile() {
+	p.LayoutDashboard()
+	var fm fmUserProfile
+	err := p.ParseForm(&fm)
+	if err == nil {
+		_, err = orm.NewOrm().QueryTable(new(User)).Update(orm.Params{
+			"updated_at": time.Now(),
+			"name":       fm.Name,
+		})
+	}
+	p.Flash(nil, err)
+	p.Redirect("nut.Plugin.GetUsersProfile")
+}
+
 // GetUsersChangePassword change user password
 // @router /users/change-password [get]
 func (p *Plugin) GetUsersChangePassword() {
 	p.LayoutDashboard()
 	p.Data[TITLE] = Tr(p.Locale(), "nut.users.change-password.title")
 	p.TplName = "nut/users/change-password.html"
+}
+
+type fmUserChangePassword struct {
+	CurrentPassword      string `form:"currentPassword" valid:"Required"`
+	NewPassword          string `form:"newPassword" valid:"MinSize(6)"`
+	PasswordConfirmation string `form:"passwordConfirmation"`
+}
+
+func (p fmUserChangePassword) Valid(v *validation.Validation) {
+	lang := language.AmericanEnglish.String()
+	if p.NewPassword != p.PasswordConfirmation {
+		v.SetError("PasswordConfirmation", Tr(lang, "nut.errors.user.passwords-not-match"))
+	}
+}
+
+// PostUsersChangePassword change user's password
+// @router /users/change-password [post]
+func (p *Plugin) PostUsersChangePassword() {
+	p.LayoutDashboard()
+	var fm fmUserChangePassword
+	err := p.ParseForm(&fm)
+	if err == nil {
+		if !HMAC().Chk([]byte(fm.CurrentPassword), []byte(p.CurrentUser().Password)) {
+			err = Te(p.Locale(), "nut.errors.user.email-password-not-match")
+		}
+	}
+	if err == nil {
+		_, err = orm.NewOrm().QueryTable(new(User)).Update(orm.Params{
+			"updated_at": time.Now(),
+			"password":   string(HMAC().Sum([]byte(fm.NewPassword))),
+		})
+	}
+	p.Flash(func() string {
+		return Tr(p.Locale(), "helpers.success")
+	}, err)
+	p.Redirect("nut.Plugin.GetUsersChangePassword")
 }
 
 // GetUsersLogs user logs

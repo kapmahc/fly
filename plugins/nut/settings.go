@@ -14,7 +14,7 @@ type Setting struct {
 	Val       string    `json:"val"`
 	Encode    bool      `json:"encode"`
 	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
 }
 
 // TableName table name
@@ -23,7 +23,7 @@ func (*Setting) TableName() string {
 }
 
 // Set set k-v
-func Set(k string, v interface{}, e bool) error {
+func Set(o orm.Ormer, k string, v interface{}, e bool) error {
 	buf, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -35,7 +35,6 @@ func Set(k string, v interface{}, e bool) error {
 	}
 
 	var it Setting
-	o := orm.NewOrm()
 	err = o.QueryTable(&it).Filter("key", k).One(&it, "id")
 	if err == nil {
 		_, err = o.QueryTable(&it).

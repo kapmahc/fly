@@ -1,0 +1,19 @@
+<div class="row">
+  {{template "nut/admin/site/_status-item.html" dict "locale" .locale "name" "network" "items" .network}}
+  {{template "nut/admin/site/_status-item.html" dict "locale" .locale "name" "database" "items" .database}}
+  {{template "nut/admin/site/_status-item.html" dict "locale" .locale "name" "jobs" "items" .jobs}}
+  {{template "nut/admin/site/_status-item.html" dict "locale" .locale "name" "os" "items" .os}}
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">{{t .locale "nut.admin.site.status.cache"}}</h4>
+      </div>
+      <ul class="list-group list-group-flush">
+        {{range .cache}}
+        <li class="list-group-item">{{.}}</li>
+        {{end}}
+      </ul>
+    </div>
+    <br/>
+  </div>
+</div>

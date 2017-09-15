@@ -6,11 +6,11 @@
     <form method="post">
       <div class="form-group">
         <label for="email">{{t .locale "attributes.email"}}</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{.currentUser.Email}}" disabled>
+        <input type="email" class="form-control" id="email" name="email" value="{{t .locale "site.author.email"}}">
       </div>
       <div class="form-group">
         <label for="name">{{t .locale "attributes.username"}}</label>
-        <input type="text" class="form-control" id="name" name="name" value={{.currentUser.Name}}>
+        <input type="text" class="form-control" id="name" name="name" value={{t .locale "site.author.name"}}>
       </div>
       {{template "layouts/application/form-buttons.html" .}}
     </form>

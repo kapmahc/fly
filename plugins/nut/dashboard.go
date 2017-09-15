@@ -30,8 +30,16 @@ func (p *Controller) LayoutDashboard() {
 	)
 	if p.IsAdmin() {
 		p.AddDashboardMenu(
-			"nut.dashboard.title",
-			Link{Href: "nut.Plugin.GetUsersLogs", Label: "nut.users.logs.title"},
+			"nut.settings.title",
+			Link{Href: "nut.Plugin.GetAdminSiteStatus", Label: "nut.admin.site.status.title"},
+			Link{Href: "nut.Plugin.GetAdminSiteInfo", Label: "nut.admin.site.info.title"},
+			Link{Href: "nut.Plugin.GetAdminSiteAuthor", Label: "nut.admin.site.author.title"},
+			Link{Href: "nut.Plugin.GetAdminSiteSeo", Label: "nut.admin.site.seo.title"},
+			Link{Href: "nut.Plugin.GetAdminSiteSMTP", Label: "nut.admin.site.smtp.title"},
+			Link{Href: "nut.Plugin.IndexAdminLocales", Label: "nut.admin.locales.index.title"},
+			Link{Href: "nut.Plugin.IndexAdminCards", Label: "nut.admin.cards.index.title"},
+			Link{Href: "nut.Plugin.IndexAdminLinks", Label: "nut.admin.links.index.title"},
+			Link{Href: "nut.Plugin.IndexAdminUsers", Label: "nut.admin.users.index.title"},
 		)
 	}
 

@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col">
+    <h2>{{.title}}</h2>
+    <hr/>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>{{t .locale "attributes.name"}}</th>
+          <th>{{t .locale "nut.attributes.user.last_sign_in"}}</th>
+          <th>{{t .locale "nut.attributes.user.current_sign_in"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .users}}
+        <tr>
+          <th scope="row">{{.Name}}&lt;{{.Email}}&gt;</th>
+          <td>{{if .LastSignInAt}}{{dtf .LastSignInAt}} [{{.LastSignInIP}}]{{end}}</td>
+          <td>{{if .CurrentSignInAt}}{{dtf .CurrentSignInAt}} [{{.CurrentSignInIP}}]{{end}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>
