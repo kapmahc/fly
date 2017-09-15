@@ -1,0 +1,22 @@
+{{$locale := .locale}}
+<div class="row">
+  <div class="col-md-12">
+    <h2>{{.title}}</h2>
+    <hr/>
+  </div>
+  {{range .dashboard}}
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">{{t $locale .label}}</h4>
+      </div>
+      <div class="list-group list-group-flush">
+        {{range .items}}
+        <a href="{{urlfor .href}}" class="list-group-item">{{t $locale .label}}</a>
+        {{end}}
+      </div>
+    </div>
+    <br/>
+  </div>
+  {{end}}
+</div>

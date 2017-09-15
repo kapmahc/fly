@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col">
+    <h2>{{.title}}</h2>
+    <hr/>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th width="35%">{{t .locale "attributes.createdAt"}}</th>
+          <th>{{t .locale "attributes.message"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .logs}}
+        <tr>
+          <th scope="row">{{.CreatedAt}}</th>
+          <td>{{.Message}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>

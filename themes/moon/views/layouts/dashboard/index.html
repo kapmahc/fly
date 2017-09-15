@@ -3,16 +3,10 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {{template "layouts/meta.html" .}}
-    {{assets_css "/3rd/bootstrap/dist/css/bootstrap.min.css"}}
-    {{assets_css "/3rd/font-awesome/css/font-awesome.min.css"}}
-    {{assets_css "/assets/application.css"}}
-    {{assets_js "/3rd/jquery/dist/jquery.min.js"}}
-    {{assets_js "/3rd/popper.js/dist/umd/popper.min.js"}}
-    {{assets_js "/3rd/bootstrap/dist/js/bootstrap.min.js"}}
-    {{assets_js "/assets/main.js"}}
+    {{template "layouts/application/assets.html" .}}
   </head>
   <body>
-    {{template "layouts/application/header.html" .}}
+    {{template "layouts/dashboard/header.html" .}}
     <div class="container">
       {{.LayoutContent}}
       {{template "layouts/application/footer.html" .}}

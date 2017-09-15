@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -15,13 +14,17 @@ import (
 	"github.com/kapmahc/fly/plugins/nut/timeago"
 )
 
+// H hash
+type H map[string]interface{}
+
 // Controller base controller
 type Controller struct {
 	beego.Controller
 
-	locale      string
-	currentUser *User
-	isAdmin     bool
+	locale         string
+	currentUser    *User
+	isAdmin        bool
+	dashboardMenus []H
 }
 
 // Locale get current locale
@@ -157,24 +160,6 @@ func (p *Controller) detectLocale() {
 func (p *Controller) LayoutApplication() {
 	// TODO
 	p.Layout = "layouts/application/index.html"
-}
-
-// LayoutDashboard use dashboard layout
-func (p *Controller) LayoutDashboard() {
-	p.MustSignIn()
-	// TODO
-	var notices []Notice
-	for i := 1; i <= 3; i++ {
-		notices = append(notices, Notice{
-			From:      &User{Logo: "/assets/person.jpg", Name: "who-am-i"},
-			Subject:   fmt.Sprintf("Subject %d", 1),
-			Body:      fmt.Sprintf("Body %d", 1),
-			UpdatedAt: time.Now().Add(time.Hour * time.Duration(i*-1)),
-		})
-	}
-	p.Data["notices"] = notices
-
-	p.Layout = "layouts/dashboard/index.html"
 }
 
 func (p *Controller) parseUserFromRequest() {

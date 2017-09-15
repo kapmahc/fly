@@ -25,9 +25,9 @@ func (p *Plugin) GetUsersLogs() {
 	var items []Log
 	_, err := orm.NewOrm().QueryTable(new(Log)).
 		Filter("user_id", p.CurrentUser().ID).
-		OrderBy("-updated_at").
+		OrderBy("-created_at").
 		Limit(120).
-		All(&items)
+		All(&items, "message", "created_at")
 	p.Flash(nil, err)
 
 	p.Data[TITLE] = Tr(p.Locale(), "nut.users.logs.title")
