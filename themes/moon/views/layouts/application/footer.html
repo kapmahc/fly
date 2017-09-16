@@ -9,5 +9,8 @@
   </p>
   <p>
     &copy;{{t .locale "site.copyright"}}
-    &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+    {{range (links "footer")}}
+    &middot; <a href="{{.Href}}">{{t $locale .Label}}</a>
+    {{end}}
+  </p>
 </footer>
