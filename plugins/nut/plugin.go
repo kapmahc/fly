@@ -30,7 +30,7 @@ func init() {
 
 	beego.AddFuncMap("cards", func(loc string) ([]Card, error) {
 		var items []Card
-		_, err := orm.NewOrm().QueryTable(new(Link)).
+		_, err := orm.NewOrm().QueryTable(new(Card)).
 			Filter("loc", loc).
 			OrderBy("sort_order").
 			All(&items, "title", "href", "logo", "summary", "type", "action")

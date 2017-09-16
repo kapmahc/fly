@@ -1,0 +1,28 @@
+<div class="row row-offcanvas row-offcanvas-right">
+  <div class="col-12 col-md-9">
+    <p class="float-right d-md-none">
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="offcanvas">Toggle nav</button>
+    </p>
+    <div class="jumbotron">
+      <h1>{{t .locale "site.title"}}</h1>
+      <p>{{t .locale "site.description"}}</p>
+    </div>
+    <div class="row">
+      {{range cards "top"}}
+      <div class="col-md-4">
+        <h2>{{.Title}}</h2>
+        <p>{{.Summary}}</p>
+        <p><a class="btn btn-secondary" href="{{.Href}}" role="button">{{.Action}} &raquo;</a></p>
+      </div>
+      {{end}}
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3 sidebar-offcanvas">
+    <div class="list-group">
+      {{range links "sidebar"}}
+      <a href="{{.Href}}" class="list-group-item">{{t $.locale .Label}}</a>
+      {{end}}
+    </div>
+  </div>
+</div>
