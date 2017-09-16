@@ -51,7 +51,6 @@ type fmLocale struct {
 // CreateAdminLocale save a locale
 // @router /admin/locales [post]
 func (p *Plugin) CreateAdminLocale() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmLocale
 

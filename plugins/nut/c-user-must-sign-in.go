@@ -23,7 +23,7 @@ type fmUserProfile struct {
 // PostUsersProfile users'profile
 // @router /users/profile [post]
 func (p *Plugin) PostUsersProfile() {
-	p.LayoutDashboard()
+	p.MustSignIn()
 	var fm fmUserProfile
 	err := p.ParseForm(&fm)
 	if err == nil {
@@ -60,7 +60,7 @@ func (p fmUserChangePassword) Valid(v *validation.Validation) {
 // PostUsersChangePassword change user's password
 // @router /users/change-password [post]
 func (p *Plugin) PostUsersChangePassword() {
-	p.LayoutDashboard()
+	p.MustSignIn()
 	var fm fmUserChangePassword
 	err := p.ParseForm(&fm)
 	if err == nil {

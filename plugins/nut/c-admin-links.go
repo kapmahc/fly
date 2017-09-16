@@ -48,7 +48,6 @@ type fmLink struct {
 // CreateAdminLink create
 // @router /admin/links [post]
 func (p *Plugin) CreateAdminLink() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmLink
 
@@ -91,7 +90,6 @@ func (p *Plugin) EditAdminLink() {
 // UpdateAdminLink update
 // @router /admin/links/:id [post]
 func (p *Plugin) UpdateAdminLink() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmLink
 

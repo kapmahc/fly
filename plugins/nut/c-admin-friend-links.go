@@ -48,7 +48,6 @@ type fmFriendLink struct {
 // CreateAdminFriendLink create
 // @router /admin/friend-links [post]
 func (p *Plugin) CreateAdminFriendLink() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmFriendLink
 
@@ -91,7 +90,6 @@ func (p *Plugin) EditAdminFriendLink() {
 // UpdateAdminFriendLink update
 // @router /admin/friend-links/:id [post]
 func (p *Plugin) UpdateAdminFriendLink() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmFriendLink
 

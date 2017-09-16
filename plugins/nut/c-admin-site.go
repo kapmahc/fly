@@ -28,7 +28,6 @@ type fmSiteInfo struct {
 // PostAdminSiteInfo update site info
 // @router /admin/site/info [post]
 func (p *Plugin) PostAdminSiteInfo() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmSiteInfo
 	o := orm.NewOrm()
@@ -77,7 +76,6 @@ type fmSiteAuthor struct {
 // PostAdminSiteAuthor update author info
 // @router /admin/site/author [post]
 func (p *Plugin) PostAdminSiteAuthor() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmSiteAuthor
 	o := orm.NewOrm()
@@ -129,7 +127,6 @@ type fmSiteSeo struct {
 // PostAdminSiteSeo update author seo
 // @router /admin/site/seo [post]
 func (p *Plugin) PostAdminSiteSeo() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmSiteSeo
 	o := orm.NewOrm()
@@ -202,7 +199,6 @@ func (p fmSiteSMTP) Valid(v *validation.Validation) {
 // PostAdminSiteSMTP update author smtp
 // @router /admin/site/smtp [post]
 func (p *Plugin) PostAdminSiteSMTP() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmSiteSMTP
 	err := p.ParseForm(&fm)

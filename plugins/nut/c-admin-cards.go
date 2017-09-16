@@ -52,7 +52,6 @@ type fmCard struct {
 // CreateAdminCard create
 // @router /admin/cards [post]
 func (p *Plugin) CreateAdminCard() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmCard
 
@@ -99,7 +98,6 @@ func (p *Plugin) EditAdminCard() {
 // UpdateAdminCard update
 // @router /admin/cards/:id [post]
 func (p *Plugin) UpdateAdminCard() {
-	p.LayoutDashboard()
 	p.MustAdmin()
 	var fm fmCard
 

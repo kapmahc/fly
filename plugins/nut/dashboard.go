@@ -45,6 +45,15 @@ func (p *Controller) LayoutDashboard() {
 		)
 	}
 
+	var forum = []Link{
+		{Href: "forum.Plugin.IndexArticles", Label: "forum.articles.index.title"},
+		{Href: "forum.Plugin.IndexComments", Label: "forum.comments.index.title"},
+	}
+	if p.IsAdmin() {
+		forum = append(forum, Link{Href: "forum.Plugin.IndexTags", Label: "forum.tags.index.title"})
+	}
+	p.AddDashboardMenu("forum.dashboard.title", forum...)
+
 	p.Data["dashboard"] = p.dashboardMenus
 	p.Layout = "layouts/dashboard/index.html"
 }
