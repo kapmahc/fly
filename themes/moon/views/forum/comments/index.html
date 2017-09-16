@@ -1,0 +1,34 @@
+{{$locale := .locale}}
+<div class="row">
+  <div class="col">
+    <h2>{{.title}}</h2>
+    <hr/>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>
+            {{t .locale "attributes.updatedAt"}}
+          </th>
+          <th>{{t .locale "attributes.content"}}</th>
+          <th>
+            {{t .locale "buttons.manage"}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .items}}
+        <tr>
+          <th scope="row">{{dtf .UpdatedAt}}</th>
+          <td><a href="{{urlfor "forum.ShowComment" ":id" .ID}}" target="_blank">{{substr .Body 0 30}}</a></td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <a type="button" class="btn btn-warning" href="{{urlfor "forum.Plugin.EditComment" ":id" .ID}}">{{t $locale "buttons.edit"}}</a>
+              <a type="button" class="btn btn-danger"  data-next="{{urlfor "forum.Plugin.IndexComments"}}" data-method="delete" href="{{urlfor "forum.Plugin.DestroyComment" ":id" .ID}}" data-confirm="{{t $locale "helpers.are-you-sure"}}" rel="nofollow">{{t $locale "buttons.remove"}}</a>
+            </div>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>

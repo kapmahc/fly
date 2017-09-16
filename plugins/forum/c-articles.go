@@ -2,6 +2,7 @@ package forum
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/astaxie/beego/orm"
 	"github.com/kapmahc/fly/plugins/nut"
@@ -14,14 +15,14 @@ func (p *Plugin) IndexArticles() {
 	var items []Article
 	if _, err := orm.NewOrm().QueryTable(new(Article)).
 		OrderBy("-updated_at").
-		All(&items, "id", "title"); err != nil {
+		All(&items, "id", "title", "updated_at"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 
 	p.Data["items"] = items
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "forum.articles.index.title")
 
-	p.TplName = "nut/articles/index.html"
+	p.TplName = "forum/articles/index.html"
 }
 
 // NewArticle new card
@@ -32,8 +33,8 @@ func (p *Plugin) NewArticle() {
 	var item Article
 	p.Data["item"] = item
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "buttons.new")
-	p.Data["action"] = p.URLFor("nut.Plugin.CreateArticle")
-	p.TplName = "nut/articles/form.html"
+	p.Data["action"] = p.URLFor("forum.Plugin.CreateArticle")
+	p.TplName = "forum/articles/form.html"
 }
 
 type fmArticle struct {
@@ -58,10 +59,26 @@ func (p *Plugin) CreateArticle() {
 		})
 	}
 	if p.Flash(nil, err) {
-		p.Redirect("nut.Plugin.IndexArticles")
+		p.Redirect("forum.Plugin.IndexArticles")
 	} else {
-		p.Redirect("nut.Plugin.NewArticle")
+		p.Redirect("forum.Plugin.NewArticle")
 	}
+}
+
+// ShowArticle show
+// @router /articles/:id [get]
+func (p *Plugin) ShowArticle() {
+	p.LayoutApplication()
+	id := p.Ctx.Input.Param(":id")
+	var item Article
+	if err := orm.NewOrm().QueryTable(&item).
+		Filter("id", id).
+		One(&item); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	p.Data[nut.TITLE] = item.Title
+	p.Data["item"] = item
+	p.TplName = "forum/articles/show.html"
 }
 
 // EditArticle edit
@@ -80,9 +97,9 @@ func (p *Plugin) EditArticle() {
 	}
 
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "buttons.edit")
-	p.Data["action"] = p.URLFor("nut.Plugin.UpdateArticle", ":id", id)
+	p.Data["action"] = p.URLFor("forum.Plugin.UpdateArticle", ":id", id)
 	p.Data["item"] = item
-	p.TplName = "nut/articles/form.html"
+	p.TplName = "forum/articles/form.html"
 }
 
 // UpdateArticle update
@@ -106,13 +123,17 @@ func (p *Plugin) UpdateArticle() {
 		}
 	}
 	if err == nil {
-		_, err = o.Update(&item, "title", "body", "type")
+		item.Title = fm.Title
+		item.Body = fm.Body
+		item.Type = fm.Type
+		item.UpdatedAt = time.Now()
+		_, err = o.Update(&item, "title", "body", "type", "updated_at")
 	}
 
 	if p.Flash(nil, err) {
-		p.Redirect("nut.Plugin.IndexArticle")
+		p.Redirect("forum.Plugin.IndexArticle")
 	} else {
-		p.Redirect("nut.Plugin.EditArticle", ":id", id)
+		p.Redirect("forum.Plugin.EditArticle", ":id", id)
 	}
 }
 

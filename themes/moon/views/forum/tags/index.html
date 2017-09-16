@@ -1,0 +1,35 @@
+{{$locale := .locale}}
+<div class="row">
+  <div class="col">
+    <h2>{{.title}}</h2>
+    <hr/>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>
+            {{t .locale "attributes.updatedAt"}}
+          </th>
+          <th>{{t .locale "attributes.name"}}</th>
+          <th>
+            {{t .locale "buttons.manage"}}
+            <a href="{{urlfor "forum.Plugin.NewTag"}}">{{t .locale "buttons.new"}}</a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .items}}
+        <tr>
+          <th scope="row">{{dtf .UpdatedAt}}</th>
+          <td><a href="{{urlfor "forum.ShowTag" ":id" .ID}}" target="_blank">{{.Name}}</a></td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <a type="button" class="btn btn-warning" href="{{urlfor "forum.Plugin.EditTag" ":id" .ID}}">{{t $locale "buttons.edit"}}</a>
+              <a type="button" class="btn btn-danger"  data-next="{{urlfor "forum.Plugin.IndexTags"}}" data-method="delete" href="{{urlfor "forum.Plugin.DestroyTag" ":id" .ID}}" data-confirm="{{t $locale "helpers.are-you-sure"}}" rel="nofollow">{{t $locale "buttons.remove"}}</a>
+            </div>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>

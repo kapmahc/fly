@@ -16,14 +16,14 @@ func (p *Plugin) IndexTags() {
 	var items []Tag
 	if _, err := orm.NewOrm().QueryTable(new(Tag)).
 		OrderBy("-updated_at").
-		All(&items, "id", "name"); err != nil {
+		All(&items, "id", "name", "updated_at"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 
 	p.Data["items"] = items
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "forum.tags.index.title")
 
-	p.TplName = "nut/tags/index.html"
+	p.TplName = "forum/tags/index.html"
 }
 
 // NewTag new card
@@ -34,8 +34,8 @@ func (p *Plugin) NewTag() {
 	var item Tag
 	p.Data["item"] = item
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "buttons.new")
-	p.Data["action"] = p.URLFor("nut.Plugin.CreateTag")
-	p.TplName = "nut/tags/form.html"
+	p.Data["action"] = p.URLFor("forum.Plugin.CreateTag")
+	p.TplName = "forum/tags/form.html"
 }
 
 type fmTag struct {
@@ -55,11 +55,28 @@ func (p *Plugin) CreateTag() {
 			Name: fm.Name,
 		})
 	}
+
 	if p.Flash(nil, err) {
-		p.Redirect("nut.Plugin.IndexTags")
+		p.Redirect("forum.Plugin.IndexTags")
 	} else {
-		p.Redirect("nut.Plugin.NewTag")
+		p.Redirect("forum.Plugin.NewTag")
 	}
+}
+
+// ShowTag show
+// @router /tags/:id [get]
+func (p *Plugin) ShowTag() {
+	p.LayoutApplication()
+	id := p.Ctx.Input.Param(":id")
+	var item Tag
+	if err := orm.NewOrm().QueryTable(&item).
+		Filter("id", id).
+		One(&item); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	p.Data[nut.TITLE] = item.Name
+	p.Data["item"] = item
+	p.TplName = "forum/tags/show.html"
 }
 
 // EditTag edit
@@ -76,9 +93,9 @@ func (p *Plugin) EditTag() {
 	}
 
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "buttons.edit")
-	p.Data["action"] = p.URLFor("nut.Plugin.UpdateTag", ":id", id)
+	p.Data["action"] = p.URLFor("forum.Plugin.UpdateTag", ":id", id)
 	p.Data["item"] = item
-	p.TplName = "nut/tags/form.html"
+	p.TplName = "forum/tags/form.html"
 }
 
 // UpdateTag update
@@ -99,9 +116,9 @@ func (p *Plugin) UpdateTag() {
 	}
 
 	if p.Flash(nil, err) {
-		p.Redirect("nut.Plugin.IndexTag")
+		p.Redirect("forum.Plugin.IndexTag")
 	} else {
-		p.Redirect("nut.Plugin.EditTag", ":id", id)
+		p.Redirect("forum.Plugin.EditTag", ":id", id)
 	}
 }
 

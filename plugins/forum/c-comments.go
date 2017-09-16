@@ -2,6 +2,7 @@ package forum
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/astaxie/beego/orm"
 	"github.com/kapmahc/fly/plugins/nut"
@@ -15,26 +16,30 @@ func (p *Plugin) IndexComments() {
 	var items []Comment
 	if _, err := orm.NewOrm().QueryTable(new(Comment)).
 		OrderBy("-updated_at").
-		All(&items, "id", "body", "type", "user_id"); err != nil {
+		All(&items, "id", "body", "type", "user_id", "updated_at"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 
 	p.Data["items"] = items
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "forum.comments.index.title")
 
-	p.TplName = "nut/comments/index.html"
+	p.TplName = "forum/comments/index.html"
 }
 
 // NewComment new card
 // @router /comments/new [get]
 func (p *Plugin) NewComment() {
 	p.LayoutDashboard()
-
+	id, err := p.GetInt("articleId", 0)
+	if err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
 	var item Comment
+	item.Article = &Article{ID: uint(id)}
 	p.Data["item"] = item
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "buttons.new")
-	p.Data["action"] = p.URLFor("nut.Plugin.CreateComment")
-	p.TplName = "nut/comments/form.html"
+	p.Data["action"] = p.URLFor("forum.Plugin.CreateComment")
+	p.TplName = "forum/comments/form.html"
 }
 
 type fmComment struct {
@@ -59,10 +64,26 @@ func (p *Plugin) CreateComment() {
 		})
 	}
 	if p.Flash(nil, err) {
-		p.Redirect("nut.Plugin.IndexComments")
+		p.Redirect("forum.Plugin.IndexComments")
 	} else {
-		p.Redirect("nut.Plugin.NewComment")
+		p.Redirect("forum.Plugin.NewComment")
 	}
+}
+
+// ShowComment show
+// @router /comments/:id [get]
+func (p *Plugin) ShowComment() {
+	p.LayoutApplication()
+	id := p.Ctx.Input.Param(":id")
+	var item Comment
+	if err := orm.NewOrm().QueryTable(&item).
+		Filter("id", id).
+		One(&item); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	p.Data[nut.TITLE] = item.Article.Title
+	p.Data["item"] = item
+	p.TplName = "forum/comments/show.html"
 }
 
 // EditComment edit
@@ -81,9 +102,9 @@ func (p *Plugin) EditComment() {
 	}
 
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "buttons.edit")
-	p.Data["action"] = p.URLFor("nut.Plugin.UpdateComment", ":id", id)
+	p.Data["action"] = p.URLFor("forum.Plugin.UpdateComment", ":id", id)
 	p.Data["item"] = item
-	p.TplName = "nut/comments/form.html"
+	p.TplName = "forum/comments/form.html"
 }
 
 // UpdateComment update
@@ -107,13 +128,16 @@ func (p *Plugin) UpdateComment() {
 		}
 	}
 	if err == nil {
+		item.Body = fm.Body
+		item.Type = fm.Type
+		item.UpdatedAt = time.Now()
 		_, err = o.Update(&item, "body", "type")
 	}
 
 	if p.Flash(nil, err) {
-		p.Redirect("nut.Plugin.IndexComment")
+		p.Redirect("forum.Plugin.IndexComment")
 	} else {
-		p.Redirect("nut.Plugin.EditComment", ":id", id)
+		p.Redirect("forum.Plugin.EditComment", ":id", id)
 	}
 }
 

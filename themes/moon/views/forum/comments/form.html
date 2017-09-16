@@ -1,0 +1,16 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-6">
+    {{template "layouts/application/flash.html" .}}
+    <h2>{{.title}}</h2>
+    <hr/>
+    <form method="post" action="{{.action}}">
+      <input type="hidden" id="articleId" name="articleId" value="{{.item.Article.ID}}"/>            
+      <div class="form-group">
+        <label for="body">{{t .locale "attributes.body"}}</label>
+        <textarea class="form-control" id="body" name="body" rows="6">{{.item.Body}}</textarea>
+      </div>
+      <input type="hidden" id="type" name="type" value="markdown"/>
+      {{template "layouts/application/form-buttons.html" .}}
+    </form>
+  </div>
+</div>

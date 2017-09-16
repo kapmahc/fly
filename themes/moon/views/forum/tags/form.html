@@ -1,0 +1,14 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-6">
+    {{template "layouts/application/flash.html" .}}
+    <h2>{{.title}}</h2>
+    <hr/>
+    <form method="post" action="{{.action}}">
+      <div class="form-group">
+        <label for="name">{{t .locale "attributes.name"}}</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{.item.Name}}">
+      </div>      
+      {{template "layouts/application/form-buttons.html" .}}
+    </form>
+  </div>
+</div>
