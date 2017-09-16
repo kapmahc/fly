@@ -60,8 +60,11 @@ func (p *Plugin) CreateAdminLocale() {
 	if err == nil {
 		err = SetLocale(orm.NewOrm(), lang, fm.Code, fm.Message)
 	}
-	p.Flash(nil, err)
-	p.Redirect("nut.Plugin.IndexAdminLocales")
+	if p.Flash(nil, err) {
+		p.Redirect("nut.Plugin.IndexAdminLocales")
+	} else {
+		p.Redirect("nut.Plugin.NewAdminLocale", "code", fm.Code)
+	}
 }
 
 // DestroyAdminLocale remove a locale
