@@ -15,13 +15,22 @@ func (p *Plugin) IndexAdminLinks() {
 	var items []Link
 	if _, err := orm.NewOrm().QueryTable(new(Link)).
 		OrderBy("loc", "sort_order").
-		All(&items, "id", "loc", "label", "href"); err != nil {
+		All(&items, "id", "loc", "label", "href", "sort_order"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 
 	p.Data["items"] = items
 	p.Data[TITLE] = Tr(p.Locale(), "nut.admin.links.index.title")
+
 	p.TplName = "nut/admin/links/index.html"
+}
+
+func (p *Plugin) setOrders() {
+	var items []int
+	for i := -10; i <= 10; i++ {
+		items = append(items, i)
+	}
+	p.Data["orders"] = items
 }
 
 // NewAdminLink new link
@@ -32,7 +41,9 @@ func (p *Plugin) NewAdminLink() {
 	var item Link
 	p.Data["item"] = item
 	p.Data[TITLE] = Tr(p.Locale(), "buttons.new")
-	p.TplName = "nut/admin/links/new.html"
+	p.setOrders()
+	p.Data["action"] = p.URLFor("nut.Plugin.CreateAdminLink")
+	p.TplName = "nut/admin/links/form.html"
 }
 
 type fmLink struct {
@@ -70,15 +81,19 @@ func (p *Plugin) CreateAdminLink() {
 func (p *Plugin) EditAdminLink() {
 	p.LayoutDashboard()
 	p.MustAdmin()
-	p.Data[TITLE] = Tr(p.Locale(), "buttons.edit")
+	id := p.Ctx.Input.Param(":id")
 	var item Link
 	if err := orm.NewOrm().QueryTable(&item).
-		Filter("id", p.Ctx.Input.Param(":id")).
+		Filter("id", id).
 		One(&item, "id", "loc", "href", "label", "sort_order"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
+
+	p.Data[TITLE] = Tr(p.Locale(), "buttons.edit")
+	p.Data["action"] = p.URLFor("nut.Plugin.UpdateAdminLink", ":id", id)
 	p.Data["item"] = item
-	p.TplName = "nut/admin/links/edit.html"
+	p.setOrders()
+	p.TplName = "nut/admin/links/form.html"
 }
 
 // UpdateAdminLink update

@@ -20,7 +20,7 @@
         {{range .items}}
         <tr>
           <th scope="row">{{.Loc}}[{{.SortOrder}}]</th>
-          <td>{{.Message}}</td>
+          <td><a href="{{.Href}}" target="_blank">{{t $.locale .Label}}</a></td>
           <td>
             <div class="btn-group btn-group-sm" role="group">
               <a type="button" class="btn btn-warning" href="{{urlfor "nut.Plugin.EditAdminLink" ":id" .ID}}">{{t $locale "buttons.edit"}}</a>

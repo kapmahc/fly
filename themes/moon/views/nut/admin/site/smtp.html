@@ -11,9 +11,8 @@
       <div class="form-group">
         <label for="port">{{t .locale "attributes.port"}}</label>
         <select class="form-control" id="port" name="port">
-          {{$port := .smtp.Port}}
           {{range .ports}}
-          <option value="{{.}}" {{if eq . $port}}selected{{end}}>{{.}}</option>
+          <option value="{{.}}" {{if eq . $.smtp.port}}selected{{end}}>{{.}}</option>
           {{end}}
         </select>
       </div>
