@@ -40,6 +40,8 @@ func (p *Controller) LayoutDashboard() {
 			Link{Href: "nut.Plugin.IndexAdminCards", Label: "nut.admin.cards.index.title"},
 			Link{Href: "nut.Plugin.IndexAdminLinks", Label: "nut.admin.links.index.title"},
 			Link{Href: "nut.Plugin.IndexAdminUsers", Label: "nut.admin.users.index.title"},
+			Link{Href: "nut.Plugin.IndexAdminFriendLinks", Label: "nut.admin.friend-links.index.title"},
+			Link{Href: "nut.Plugin.IndexLeaveWords", Label: "nut.leave-words.index.title"},
 		)
 	}
 

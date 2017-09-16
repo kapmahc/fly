@@ -27,6 +27,15 @@ type Controller struct {
 	dashboardMenus []H
 }
 
+// SetSortOrders sort order for template
+func (p *Controller) SetSortOrders() {
+	var items []int
+	for i := -10; i <= 10; i++ {
+		items = append(items, i)
+	}
+	p.Data["orders"] = items
+}
+
 // Locale get current locale
 func (p *Controller) Locale() string {
 	return p.locale
@@ -158,7 +167,6 @@ func (p *Controller) detectLocale() {
 
 // LayoutApplication use application layout
 func (p *Controller) LayoutApplication() {
-	// TODO
 	p.Layout = "layouts/application/index.html"
 }
 

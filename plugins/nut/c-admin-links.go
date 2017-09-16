@@ -25,14 +25,6 @@ func (p *Plugin) IndexAdminLinks() {
 	p.TplName = "nut/admin/links/index.html"
 }
 
-func (p *Plugin) setOrders() {
-	var items []int
-	for i := -10; i <= 10; i++ {
-		items = append(items, i)
-	}
-	p.Data["orders"] = items
-}
-
 // NewAdminLink new link
 // @router /admin/links/new [get]
 func (p *Plugin) NewAdminLink() {
@@ -41,7 +33,7 @@ func (p *Plugin) NewAdminLink() {
 	var item Link
 	p.Data["item"] = item
 	p.Data[TITLE] = Tr(p.Locale(), "buttons.new")
-	p.setOrders()
+	p.SetSortOrders()
 	p.Data["action"] = p.URLFor("nut.Plugin.CreateAdminLink")
 	p.TplName = "nut/admin/links/form.html"
 }
@@ -92,7 +84,7 @@ func (p *Plugin) EditAdminLink() {
 	p.Data[TITLE] = Tr(p.Locale(), "buttons.edit")
 	p.Data["action"] = p.URLFor("nut.Plugin.UpdateAdminLink", ":id", id)
 	p.Data["item"] = item
-	p.setOrders()
+	p.SetSortOrders()
 	p.TplName = "nut/admin/links/form.html"
 }
 

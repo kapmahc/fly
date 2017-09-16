@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 const (
@@ -18,6 +19,24 @@ type Plugin struct {
 }
 
 func init() {
+	beego.AddFuncMap("links", func(loc string) ([]Link, error) {
+		var items []Link
+		_, err := orm.NewOrm().QueryTable(new(Link)).
+			Filter("loc", loc).
+			OrderBy("sort_order").
+			All(&items, "sort_order", "href", "label")
+		return items, err
+	})
+
+	beego.AddFuncMap("cards", func(loc string) ([]Card, error) {
+		var items []Card
+		_, err := orm.NewOrm().QueryTable(new(Link)).
+			Filter("loc", loc).
+			OrderBy("sort_order").
+			All(&items, "title", "href", "logo", "summary", "type", "action")
+		return items, err
+	})
+
 	beego.AddFuncMap("dtf", func(t time.Time) string {
 		return t.Format(time.RFC822)
 	})
