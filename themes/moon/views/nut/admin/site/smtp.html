@@ -6,12 +6,12 @@
     <form method="post" data-confirm="{{t .locale "helpers.are-you-sure"}}">
       <div class="form-group">
         <label for="host">{{t .locale "attributes.host"}}</label>
-        <input type="text" class="form-control" id="host" name="host" value="{{.form.host}}">
+        <input type="text" class="form-control" id="host" name="host" value="{{.smtp.Host}}">
       </div>
       <div class="form-group">
         <label for="port">{{t .locale "attributes.port"}}</label>
         <select class="form-control" id="port" name="port">
-          {{$port := .form.port}}
+          {{$port := .smtp.Port}}
           {{range .ports}}
           <option value="{{.}}" {{if eq . $port}}selected{{end}}>{{.}}</option>
           {{end}}
@@ -19,7 +19,7 @@
       </div>
       <div class="form-group">
         <label for="sender">{{t .locale "nut.admin.site.smtp.sender"}}</label>
-        <input type="email" class="form-control" id="sender" name="sender" value="{{.form.sender}}">
+        <input type="email" class="form-control" id="sender" name="sender" value="{{.smtp.Sender}}">
       </div>
       <div class="form-group">
         <label for="password">{{t .locale "attributes.password"}}</label>

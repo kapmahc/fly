@@ -3,10 +3,9 @@ package nut
 import (
 	"net/http"
 
-	"golang.org/x/text/language"
-
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
+	"golang.org/x/text/language"
 )
 
 // GetAdminSiteInfo edit site info
@@ -163,20 +162,27 @@ func (p *Plugin) PostAdminSiteSeo() {
 func (p *Plugin) GetAdminSiteSMTP() {
 	p.LayoutDashboard()
 	p.MustAdmin()
-	smtp := map[string]interface{}{}
+	var smtp SMTP
 	if err := Get("site.smtp", &smtp); err != nil {
-		smtp["host"] = "localhost"
-		smtp["port"] = 25
-		smtp["sender"] = "who-am-i@change-me.com"
+		smtp.Host = "localhost"
+		smtp.Port = 25
+		smtp.Sender = "who-am-i@change-me.com"
 	} else {
-		smtp["password"] = ""
-		smtp["port"] = int(smtp["port"].(float64))
+		smtp.Password = ""
 	}
 
 	p.Data["ports"] = []int{25, 465, 587}
-	p.Data["form"] = smtp
+	p.Data["smtp"] = smtp
 	p.Data[TITLE] = Tr(p.Locale(), "nut.admin.site.smtp.title")
 	p.TplName = "nut/admin/site/smtp.html"
+}
+
+// SMTP smtp
+type SMTP struct {
+	Host     string
+	Port     int
+	Sender   string
+	Password string
 }
 
 type fmSiteSMTP struct {
@@ -204,11 +210,11 @@ func (p *Plugin) PostAdminSiteSMTP() {
 		err = Set(
 			orm.NewOrm(),
 			"site.smtp",
-			H{
-				"host":     fm.Host,
-				"port":     fm.Port,
-				"sender":   fm.Sender,
-				"password": fm.Password,
+			SMTP{
+				Host:     fm.Host,
+				Port:     fm.Port,
+				Sender:   fm.Sender,
+				Password: fm.Password,
 			},
 			true,
 		)

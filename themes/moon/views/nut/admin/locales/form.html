@@ -1,0 +1,18 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-6">
+    {{template "layouts/application/flash.html" .}}
+    <h2>{{.title}}</h2>
+    <hr/>
+    <form method="post" action="{{urlfor "nut.Plugin.CreateAdminLocale"}}">
+      <div class="form-group">
+        <label for="code">{{t .locale "nut.attributes.locale.code"}}</label>
+        <input type="text" class="form-control" id="code" name="code" value="{{.form.Code}}">
+      </div>
+      <div class="form-group">
+        <label for="message">{{t .locale "nut.attributes.locale.message"}}</label>
+        <textarea class="form-control" id="message" name="message" rows="6">{{.form.Message}}</textarea>
+      </div>
+      {{template "layouts/application/form-buttons.html" .}}
+    </form>
+  </div>
+</div>

@@ -39,4 +39,14 @@ func init() {
 			return dict, nil
 		},
 	)
+
+	RegisterSitemap(func() ([]string, error) {
+		return []string{
+			"/users/sign-in",
+			"/users/sign-up",
+			"/users/forgot-password",
+			"/users/confirm",
+			"/users/unlock",
+		}, nil
+	})
 }
