@@ -31,13 +31,16 @@ $(function() {
     }
     if (ok) {
       // console.log(method, url, next);
-      $.ajax({
-        type: method,
-        url: url,
-        success: function() {
+      $.ajax({type: method, url: url}).done(function(rst) {
+        // FIXME
+        if (rst.ok) {
           window.location.href = next;
+        } else {
+          alert(rst);
         }
-      })
+      }).fail(function(jqXHR, textStatus, errorThrown) {
+        alert(textStatus);
+      });
     }
   });
 });

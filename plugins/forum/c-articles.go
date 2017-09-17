@@ -218,9 +218,29 @@ func (p *Plugin) UpdateArticle() {
 // @router /articles/:id [delete]
 func (p *Plugin) DestroyArticle() {
 	p.MustSignIn()
-	_, err := orm.NewOrm().QueryTable(new(Article)).
+	o := orm.NewOrm()
+	var item Article
+	if err := o.Begin(); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	err := o.QueryTable(&item).
 		Filter("id", p.Ctx.Input.Param(":id")).
-		Delete()
+		One(&item)
+	if err == nil {
+		_, err = o.QueryTable(new(Comment)).Filter("article_id", item.ID).Delete()
+	}
+	if err == nil {
+		_, err = o.QueryM2M(&item, "Tags").Clear()
+	}
+	if err == nil {
+		o.Delete(&item)
+	}
+
+	if err == nil {
+		o.Commit()
+	} else {
+		o.Rollback()
+	}
 	if err != nil {
 		p.Abort(http.StatusOK, err)
 	}

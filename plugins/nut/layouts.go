@@ -122,6 +122,7 @@ func (p *Controller) Abort(s int, e error) {
 		p.Controller.Abort("500")
 	} else {
 		beego.Error(e)
+		// FIXME alaways return 200
 		p.CustomAbort(s, e.Error())
 	}
 }
