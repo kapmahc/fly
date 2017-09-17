@@ -16,7 +16,7 @@ func (p *Plugin) IndexComments() {
 	var items []Comment
 	if _, err := orm.NewOrm().QueryTable(new(Comment)).
 		OrderBy("-updated_at").
-		All(&items, "id", "body", "type", "user_id", "updated_at"); err != nil {
+		All(&items, "id", "article_id", "body", "type", "user_id", "updated_at"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 
@@ -64,26 +64,10 @@ func (p *Plugin) CreateComment() {
 		})
 	}
 	if p.Flash(nil, err) {
-		p.Redirect("forum.Plugin.IndexComments")
+		p.Redirect("forum.Plugin.ShowArticle", ":id", fm.ArticleID)
 	} else {
 		p.Redirect("forum.Plugin.NewComment")
 	}
-}
-
-// ShowComment show
-// @router /comments/:id [get]
-func (p *Plugin) ShowComment() {
-	p.LayoutApplication()
-	id := p.Ctx.Input.Param(":id")
-	var item Comment
-	if err := orm.NewOrm().QueryTable(&item).
-		Filter("id", id).
-		One(&item); err != nil {
-		p.Abort(http.StatusInternalServerError, err)
-	}
-	p.Data[nut.TITLE] = item.Article.Title
-	p.Data["item"] = item
-	p.TplName = "forum/comments/show.html"
 }
 
 // EditComment edit
@@ -135,7 +119,7 @@ func (p *Plugin) UpdateComment() {
 	}
 
 	if p.Flash(nil, err) {
-		p.Redirect("forum.Plugin.IndexComment")
+		p.Redirect("forum.Plugin.ShowArticle", ":id", fm.ArticleID)
 	} else {
 		p.Redirect("forum.Plugin.EditComment", ":id", id)
 	}

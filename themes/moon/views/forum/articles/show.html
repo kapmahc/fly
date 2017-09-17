@@ -1,0 +1,28 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-10">
+    <h2>{{.item.Title}}</h2>
+    <hr/>
+    {{t .locale "forum.attributes.article.tags"}}:
+    {{range .item.Tags}}
+    &nbsp; <a target="_blank" href="{{urlfor "forum.Plugin.ShowTag" ":id" .ID}}">{{.Name}}</a>
+    {{end}}
+    <br/>
+    <p class="markdown">{{.item.Body}}</p>
+    <br/>
+    <h4>
+      {{t .locale "forum.attributes.article.comments"}}
+      {{if .currentUser}}
+      <a href="{{urlfor "forum.Plugin.NewComment" "articleId" .item.ID}}">{{t .locale "buttons.new"}}</a>
+      {{end}}
+    </h4>
+    <hr/>
+    {{range .item.Comments}}
+    <blockquote class="blockquote">
+      <p class="mb-0 markdown">{{.Body}}</p>
+      <footer class="blockquote-footer">
+        <cite>{{dtf .UpdatedAt}}</cite>
+      </footer>
+    </blockquote>
+    {{end}}
+  </div>
+</div>

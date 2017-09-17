@@ -108,9 +108,16 @@ func (p *Plugin) ShowArticle() {
 	p.LayoutApplication()
 	id := p.Ctx.Input.Param(":id")
 	var item Article
-	if err := orm.NewOrm().QueryTable(&item).
+	o := orm.NewOrm()
+	if err := o.QueryTable(&item).
 		Filter("id", id).
 		One(&item); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	if _, err := o.LoadRelated(&item, "Comments"); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	if _, err := o.LoadRelated(&item, "Tags"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 	p.Data[nut.TITLE] = item.Title

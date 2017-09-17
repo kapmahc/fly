@@ -1,0 +1,7 @@
+<div class="row">
+  {{range .items}}
+  <div class="col-md-2">
+    <a href="{{urlfor "forum.Plugin.ShowTag" ":id" .ID}}" target="_blank">{{.Name}}</a>    
+  </div>
+  {{end}}
+</div>

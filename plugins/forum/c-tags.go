@@ -69,9 +69,13 @@ func (p *Plugin) ShowTag() {
 	p.LayoutApplication()
 	id := p.Ctx.Input.Param(":id")
 	var item Tag
-	if err := orm.NewOrm().QueryTable(&item).
+	o := orm.NewOrm()
+	if err := o.QueryTable(&item).
 		Filter("id", id).
 		One(&item); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	if _, err := o.LoadRelated(&item, "Articles"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 	p.Data[nut.TITLE] = item.Name

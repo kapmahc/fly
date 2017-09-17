@@ -5,8 +5,13 @@ $.ajaxSetup({
 });
 
 $(function() {
+  $("p.markdown").each(function(e) {
+    var txt = $(this).text();
+    $(this).html(marked(txt));
+  });
+
   $("form[data-confirm]").submit(function(e) {
-    if(!confirm($(this).data('confirm'))){
+    if (!confirm($(this).data('confirm'))) {
       e.preventDefault();
     }
   });

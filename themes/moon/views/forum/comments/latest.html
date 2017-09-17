@@ -1,0 +1,14 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-10">
+    <h2>{{.title}}</h2>
+    <hr/>
+    {{range .items}}
+    <blockquote class="blockquote">
+      <p class="mb-0 markdown">{{.Body}}</p>
+      <footer class="blockquote-footer">
+        <cite><a target="_blank" href="{{urlfor "forum.Plugin.ShowArticle" ":id" .Article.ID}}">{{dtf .UpdatedAt}}</a></cite>
+      </footer>
+    </blockquote>
+    {{end}}
+  </div>
+</div>

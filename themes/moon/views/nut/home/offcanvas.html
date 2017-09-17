@@ -1,5 +1,5 @@
-<div class="row row-offcanvas row-offcanvas-right">
-  <div class="col-12 col-md-9">
+<div class="row">
+  <div class="col-md-9">
     <p class="float-right d-md-none">
       <button type="button" class="btn btn-primary btn-sm" data-toggle="offcanvas">Toggle nav</button>
     </p>
@@ -18,10 +18,10 @@
     </div>
   </div>
 
-  <div class="col-6 col-md-3 sidebar-offcanvas">
+  <div class="col-md-3">
     <div class="list-group">
       {{range links "sidebar"}}
-      <a href="{{.Href}}" class="list-group-item">{{t $.locale .Label}}</a>
+      <a href="{{.Href}}" class="list-group-item list-group-item-action">{{t $.locale .Label}}</a>
       {{end}}
     </div>
   </div>

@@ -20,7 +20,7 @@
         {{range .items}}
         <tr>
           <th scope="row">{{dtf .UpdatedAt}}</th>
-          <td><a href="{{urlfor "forum.ShowArticle" ":id" .ID}}" target="_blank">{{.Title}}</a></td>
+          <td><a href="{{urlfor "forum.Plugin.ShowArticle" ":id" .ID}}" target="_blank">{{.Title}}</a></td>
           <td>
             <div class="btn-group btn-group-sm" role="group">
               <a type="button" class="btn btn-warning" href="{{urlfor "forum.Plugin.EditArticle" ":id" .ID}}">{{t $locale "buttons.edit"}}</a>

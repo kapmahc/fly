@@ -1,0 +1,14 @@
+<div class="row">
+  {{range .items}}
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">{{.Title}}</h4>
+        <p class="card-text markdown">{{substr .Body 0 255}}</p>
+        <a target="_blank" href="{{urlfor "forum.Plugin.ShowArticle" ":id" .ID}}" class="btn btn-primary">{{t $.locale "buttons.more"}}</a>
+      </div>
+    </div>
+    <br/>
+  </div>
+  {{end}}
+</div>
