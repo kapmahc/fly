@@ -2,27 +2,47 @@
   <div class="col-md-10">
     <h2>{{.item.Title}}</h2>
     <hr/>
-    {{t .locale "forum.attributes.article.tags"}}:
-    {{range .item.Tags}}
-    &nbsp; <a target="_blank" href="{{urlfor "forum.Plugin.ShowTag" ":id" .ID}}">{{.Name}}</a>
-    {{end}}
-    <br/>
     <p class="markdown">{{.item.Body}}</p>
-    <br/>
-    <h4>
-      {{t .locale "forum.attributes.article.comments"}}
-      {{if .currentUser}}
-      <a href="{{urlfor "forum.Plugin.NewComment" "articleId" .item.ID}}">{{t .locale "buttons.new"}}</a>
-      {{end}}
-    </h4>
-    <hr/>
-    {{range .item.Comments}}
-    <blockquote class="blockquote">
-      <p class="mb-0 markdown">{{.Body}}</p>
-      <footer class="blockquote-footer">
-        <cite>{{dtf .UpdatedAt}}</cite>
-      </footer>
-    </blockquote>
-    {{end}}
   </div>
+  {{if .available }}
+  <div class="col-md-6">
+    {{template "layouts/application/flash.html" .}}
+    <form method="post" action="{{urlfor "survey.Plugin.CreateRecord" "formId" .item.ID}}">
+      {{range .item.Fields}}
+      {{if eq .Type "text"}}
+        <div class="form-group">
+          <label for="{{.Name}}"> {{.Label}}{{if .Required}}*{{end}}</label>
+          <input type="text" class="form-control" id="{{.Name}}" name="{{.Name}}">
+        </div>
+      {{else if eq .Type "checkboxs"}}
+        <h5>{{.Label}} {{if .Required}}*{{end}}</h5>
+        <div class="form-check">
+          {{$name:=.Name}}
+          {{range $k, $v := (split .Body "\r\n")}}
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="name_{{$k}}" name="{{$name}}" value="{{$v}}">
+            {{$v}}
+          </label>
+          {{end}}
+        </div>
+      {{else if eq .Type "select"}}
+        <div class="form-group">
+          <label for="sortOrder">{{.Label}} {{if .Required}}*{{end}}</label>
+          <select class="form-control" id="{{.Name}}" name="{{.Name}}">
+            {{range (split .Body "\r\n")}}
+            <option value="{{.}}">{{.}}</option>
+            {{end}}
+          </select>
+        </div>
+      {{else if eq .Type "textarea"}}
+        <div class="form-group">
+          <label for="body">{{.Label}} {{if .Required}}*{{end}}</label>
+          <textarea class="form-control" id="{{.Name}}" name="{{.Name}}" rows="6"></textarea>
+        </div>
+      {{end}}
+      {{end}}
+      {{template "layouts/application/form-buttons.html" .}}
+    </form>
+  </div>
+  {{end}}
 </div>

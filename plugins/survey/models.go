@@ -30,6 +30,12 @@ func (*Form) TableName() string {
 	return "survey_forms"
 }
 
+// Available available?
+func (p *Form) Available() bool {
+	now := time.Now()
+	return now.After(p.StartUp) && now.Before(p.ShutDown)
+}
+
 // Field field
 type Field struct {
 	ID        uint      `orm:"column(id)" json:"id"`

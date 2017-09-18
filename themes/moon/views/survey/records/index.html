@@ -1,0 +1,38 @@
+{{$locale := .locale}}
+<div class="row">
+  <div class="col">
+    <h2>{{.title}} - {{.item.Title}}</h2>
+    <hr/>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>
+            {{t .locale "attributes.updatedAt"}}
+          </th>
+          {{range .fields}}
+          <th>{{.Name}}</th>
+          {{end}}
+          <th>
+            {{t .locale "buttons.manage"}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .items}}
+        <tr>
+          <th scope="row">{{map_get . "updatedAt"}}</th>
+          {{$item := .}}
+          {{range $.fields}}
+          <td><pre>{{map_get $item .Name }}</pre></td>
+          {{end}}
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <a type="button" class="btn btn-danger"  data-next="{{urlfor "survey.Plugin.IndexRecords" "formId" $.form.ID}}" data-method="delete" href="{{urlfor "survey.Plugin.DestroyRecord" ":id" (map_get . "id")}}" data-confirm="{{t $locale "helpers.are-you-sure"}}" rel="nofollow">{{t $locale "buttons.remove"}}</a>
+            </div>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>

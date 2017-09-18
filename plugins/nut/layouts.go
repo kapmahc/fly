@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	// DATE_FORMAT date format
-	DATE_FORMAT = "2006-01-02"
+	// DateFormat date format
+	DateFormat = "2006-01-02"
 )
 
 // H hash

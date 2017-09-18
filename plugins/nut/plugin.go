@@ -2,6 +2,7 @@ package nut
 
 import (
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -41,8 +42,9 @@ func init() {
 		return t.Format(time.RFC822)
 	})
 	beego.AddFuncMap("df", func(t time.Time) string {
-		return t.Format(DATE_FORMAT)
+		return t.Format(DateFormat)
 	})
+	beego.AddFuncMap("split", strings.Split)
 
 	beego.AddFuncMap(
 		"dict",

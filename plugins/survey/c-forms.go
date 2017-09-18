@@ -52,12 +52,12 @@ type fmForm struct {
 }
 
 func (p *fmForm) Valid(v *validation.Validation) {
-	if begin, err := time.Parse(nut.DATE_FORMAT, p.StartUp); err == nil {
+	if begin, err := time.Parse(nut.DateFormat, p.StartUp); err == nil {
 		p.startUp = begin
 	} else {
 		v.SetError("StartUp", "bad format")
 	}
-	if end, err := time.Parse(nut.DATE_FORMAT, p.ShutDown); err == nil {
+	if end, err := time.Parse(nut.DateFormat, p.ShutDown); err == nil {
 		p.shutDown = end
 	} else {
 		v.SetError("ShutDown", "bad format")
@@ -106,11 +106,12 @@ func (p *Plugin) ShowForm() {
 		One(&item); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
-	if _, err := o.LoadRelated(&item, "Fields"); err != nil {
+	if _, err := o.LoadRelated(&item, "Fields", true, 100, 0, "sort_order"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
 	p.Data[nut.TITLE] = item.Title
 	p.Data["item"] = item
+	p.Data["available"] = item.Available()
 	p.TplName = "survey/forms/show.html"
 }
 

@@ -23,6 +23,7 @@
           <td><a href="{{urlfor "survey.Plugin.ShowForm" ":id" .ID}}" target="_blank">{{.Title}}</a></td>
           <td>
             <div class="btn-group btn-group-sm" role="group">
+              <a type="button" class="btn btn-success" href="{{urlfor "survey.Plugin.IndexRecords" "formId" .ID}}">{{t $locale "survey.attributes.form.records"}}</a>
               <a type="button" class="btn btn-info" href="{{urlfor "survey.Plugin.IndexFields" "formId" .ID}}">{{t $locale "survey.attributes.form.fields"}}</a>
               <a type="button" class="btn btn-warning" href="{{urlfor "survey.Plugin.EditForm" ":id" .ID}}">{{t $locale "buttons.edit"}}</a>
               <a type="button" class="btn btn-danger"  data-next="{{urlfor "survey.Plugin.IndexForms"}}" data-method="delete" href="{{urlfor "survey.Plugin.DestroyForm" ":id" .ID}}" data-confirm="{{t $locale "helpers.are-you-sure"}}" rel="nofollow">{{t $locale "buttons.remove"}}</a>

@@ -3,10 +3,16 @@
     {{template "layouts/application/flash.html" .}}
     <h2>{{.title}}</h2>
     <hr/>
-    <form method="post" action="{{.action}}">      
+    <form method="post" action="{{.action}}">
       <div class="form-group">
         <label for="name">{{t .locale "attributes.name"}}</label>
         <input type="text" class="form-control" id="name" name="name" value="{{.item.Name}}">
+      </div>
+      <div class="form-check">
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" id="required" name="required" value="true" {{if .item.Required}}checked{{end}}>
+          {{t .locale "attributes.required"}}
+        </label>
       </div>
       <div class="form-group">
         <label for="sortOrder">{{t .locale "attributes.sortOrder"}}</label>
