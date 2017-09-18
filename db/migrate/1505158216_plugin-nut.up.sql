@@ -59,7 +59,7 @@ CREATE TABLE policies (
   user_id    BIGINT                      NOT NULL REFERENCES users,
   role_id    BIGINT                      NOT NULL REFERENCES roles,
   start_up   DATE                        NOT NULL DEFAULT current_date,
-  shut_down  DATE                        NOT NULL DEFAULT '2016-12-13',
+  shut_down  DATE                        NOT NULL DEFAULT '2017-09-18',
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );

@@ -5,6 +5,9 @@ CREATE TABLE survey_forms (
   type       VARCHAR(8)                  NOT NULL DEFAULT 'markdown',
   uid        VARCHAR(36) NOT NULL,
   mode       VARCHAR(8)                  NOT NULL,
+  user_id    BIGINT                      NOT NULL REFERENCES users,
+  start_up   DATE                        NOT NULL DEFAULT current_date,
+  shut_down  DATE                        NOT NULL DEFAULT '2017-09-18',
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );

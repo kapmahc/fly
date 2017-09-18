@@ -32,5 +32,5 @@ func (p *Plugin) CreateAttachment() {
 	p.Data[TITLE] = Tr(p.Locale(), "buttons.new")
 	p.SetSortOrders()
 	p.Data["action"] = p.URLFor("nut.Plugin.CreateAdminFriendLink")
-	p.TplName = "nut/admin/friend-links/form.html"
+	p.TplName = "nut/admin/attachments/form.html"
 }

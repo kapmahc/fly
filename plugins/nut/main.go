@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"html/template"
+	"log"
 	"os"
 	"path"
 	"time"
@@ -283,6 +284,17 @@ func generateNginxConf(c *cli.Context) error {
 		})
 }
 
+type migrateLogger struct {
+}
+
+func (p *migrateLogger) Printf(format string, v ...interface{}) {
+	log.Printf(format, v...)
+}
+
+func (p *migrateLogger) Verbose() bool {
+	return true
+}
+
 func migrateAction(fun func(*cli.Context, *migrate.Migrate) error) cli.ActionFunc {
 	return func(ctx *cli.Context) error {
 		drv := beego.AppConfig.String("databasedriver")
@@ -308,6 +320,7 @@ func migrateAction(fun func(*cli.Context, *migrate.Migrate) error) cli.ActionFun
 		if err != nil {
 			return err
 		}
+		mig.Log = &migrateLogger{}
 		if err := fun(ctx, mig); err != nil {
 			return err
 		}

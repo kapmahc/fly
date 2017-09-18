@@ -4,16 +4,25 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/kapmahc/fly/plugins/nut"
 )
 
 // Form form
 type Form struct {
 	ID        uint      `orm:"column(id)" json:"id"`
+	UID       string    `orm:"column(uid)" json:"uid"`
+	Mode      string    `json:"mode"`
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
 	Type      string    `json:"type"`
+	StartUp   time.Time `json:"startUp"`
+	ShutDown  time.Time `json:"shutDown"`
 	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
 	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`
+
+	User    *nut.User `orm:"rel(fk)" json:"user"`
+	Fields  []*Field  `orm:"reverse(many)" json:"fields"`
+	Records []*Record `orm:"reverse(many)" json:"records"`
 }
 
 // TableName table name

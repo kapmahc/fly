@@ -28,6 +28,18 @@ func (p *Controller) LayoutDashboard() {
 		Link{Href: "nut.Plugin.GetUsersProfile", Label: "nut.users.profile.title"},
 		Link{Href: "nut.Plugin.GetUsersChangePassword", Label: "nut.users.change-password.title"},
 	)
+
+	var forum = []Link{
+		{Href: "forum.Plugin.IndexArticles", Label: "forum.articles.index.title"},
+		{Href: "forum.Plugin.IndexComments", Label: "forum.comments.index.title"},
+	}
+	if p.IsAdmin() {
+		forum = append(forum, Link{Href: "forum.Plugin.IndexTags", Label: "forum.tags.index.title"})
+	}
+	p.AddDashboardMenu("forum.dashboard.title", forum...)
+
+	p.AddDashboardMenu("survey.dashboard.title", Link{Href: "survey.Plugin.IndexForms", Label: "survey.forms.index.title"})
+
 	if p.IsAdmin() {
 		p.AddDashboardMenu(
 			"nut.settings.title",
@@ -44,15 +56,6 @@ func (p *Controller) LayoutDashboard() {
 			Link{Href: "nut.Plugin.IndexLeaveWords", Label: "nut.leave-words.index.title"},
 		)
 	}
-
-	var forum = []Link{
-		{Href: "forum.Plugin.IndexArticles", Label: "forum.articles.index.title"},
-		{Href: "forum.Plugin.IndexComments", Label: "forum.comments.index.title"},
-	}
-	if p.IsAdmin() {
-		forum = append(forum, Link{Href: "forum.Plugin.IndexTags", Label: "forum.tags.index.title"})
-	}
-	p.AddDashboardMenu("forum.dashboard.title", forum...)
 
 	p.Data["dashboard"] = p.dashboardMenus
 	p.Layout = "layouts/dashboard/index.html"

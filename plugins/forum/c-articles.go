@@ -49,10 +49,9 @@ func (p *Plugin) setTagsData() {
 }
 
 type fmArticle struct {
-	Title string        `form:"title" valid:"Required"`
-	Body  string        `form:"body" valid:"Required"`
-	Type  string        `form:"type" valid:"Required"`
-	Tags  []interface{} `form:"tags"`
+	Title string `form:"title" valid:"Required"`
+	Body  string `form:"body" valid:"Required"`
+	Type  string `form:"type" valid:"Required"`
 }
 
 // CreateArticle create
