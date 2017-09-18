@@ -1,0 +1,35 @@
+{{$locale := .locale}}
+<div class="row">
+  <div class="col">
+    <h2>{{.title}}</h2>
+    <hr/>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>
+            {{t .locale "attributes.name"}}
+          </th>
+          <th>{{t .locale "attributes.content"}}</th>
+          <th>
+            {{t .locale "buttons.manage"}}
+            <a href="{{urlfor "survey.Plugin.NewField" "formId" .form.ID}}">{{t .locale "buttons.new"}}</a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .items}}
+        <tr>
+          <th scope="row">{{.Name}}[{{.SortOrder}}]</th>
+          <td>{{.Label}}[{{.Type}}]</td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <a type="button" class="btn btn-warning" href="{{urlfor "survey.Plugin.EditField" ":id" .ID}}">{{t $locale "buttons.edit"}}</a>
+              <a type="button" class="btn btn-danger"  data-next="{{urlfor "survey.Plugin.IndexFields" "formId" .Form.ID}}" data-method="delete" href="{{urlfor "survey.Plugin.DestroyField" ":id" .ID}}" data-confirm="{{t $locale "helpers.are-you-sure"}}" rel="nofollow">{{t $locale "buttons.remove"}}</a>
+            </div>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>

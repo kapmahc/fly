@@ -12,10 +12,10 @@ import (
 // @router /comments [get]
 func (p *Plugin) IndexComments() {
 	p.LayoutDashboard()
-	p.MustAdmin()
 	var items []Comment
 	if _, err := orm.NewOrm().QueryTable(new(Comment)).
 		OrderBy("-updated_at").
+		Filter("user_id", p.CurrentUser().ID).
 		All(&items, "id", "article_id", "body", "type", "user_id", "updated_at"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
@@ -129,9 +129,27 @@ func (p *Plugin) UpdateComment() {
 // @router /comments/:id [delete]
 func (p *Plugin) DestroyComment() {
 	p.MustSignIn()
-	_, err := orm.NewOrm().QueryTable(new(Comment)).
+	o := orm.NewOrm()
+	if err := o.Begin(); err != nil {
+		p.Abort(http.StatusInternalServerError, err)
+	}
+	var item Comment
+	err := o.QueryTable(&item).
 		Filter("id", p.Ctx.Input.Param(":id")).
-		Delete()
+		One(&item)
+	if err == nil {
+		if item.User.ID != p.CurrentUser().ID && !p.IsAdmin() {
+			err = nut.Te(p.Locale(), "errors.not-allow")
+		}
+	}
+	if err == nil {
+		_, err = o.Delete(&item)
+	}
+	if err == nil {
+		o.Commit()
+	} else {
+		o.Rollback()
+	}
 	if err != nil {
 		p.Abort(http.StatusOK, err)
 	}

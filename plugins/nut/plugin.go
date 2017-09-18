@@ -40,6 +40,9 @@ func init() {
 	beego.AddFuncMap("dtf", func(t time.Time) string {
 		return t.Format(time.RFC822)
 	})
+	beego.AddFuncMap("df", func(t time.Time) string {
+		return t.Format(DATE_FORMAT)
+	})
 
 	beego.AddFuncMap(
 		"dict",

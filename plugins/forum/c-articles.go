@@ -16,6 +16,7 @@ func (p *Plugin) IndexArticles() {
 	var items []Article
 	if _, err := orm.NewOrm().QueryTable(new(Article)).
 		OrderBy("-updated_at").
+		Filter("user_id", p.CurrentUser().ID).
 		All(&items, "id", "title", "updated_at"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}
@@ -225,6 +226,11 @@ func (p *Plugin) DestroyArticle() {
 	err := o.QueryTable(&item).
 		Filter("id", p.Ctx.Input.Param(":id")).
 		One(&item)
+	if err == nil {
+		if item.User.ID != p.CurrentUser().ID && !p.IsAdmin() {
+			err = nut.Te(p.Locale(), "errors.not-allow")
+		}
+	}
 	if err == nil {
 		_, err = o.QueryTable(new(Comment)).Filter("article_id", item.ID).Delete()
 	}

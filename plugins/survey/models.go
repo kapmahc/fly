@@ -38,6 +38,7 @@ type Field struct {
 	Name      string    `json:"name"`
 	Label     string    `json:"label"`
 	Value     string    `json:"value"`
+	Required  bool      `json:"required"`
 	SortOrder int       `json:"sortOrder"`
 	UpdatedAt time.Time `orm:"auto_now" json:"updatedAt"`
 	CreatedAt time.Time `orm:"auto_now_add" json:"createdAt"`

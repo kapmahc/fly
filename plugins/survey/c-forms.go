@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/validation"
 	"github.com/google/uuid"
 	"github.com/kapmahc/fly/plugins/nut"
 )
@@ -32,6 +33,8 @@ func (p *Plugin) NewForm() {
 	p.LayoutDashboard()
 
 	var item Form
+	item.StartUp = time.Now()
+	item.ShutDown = item.StartUp.AddDate(0, 3, 0)
 	p.Data["item"] = item
 	p.Data[nut.TITLE] = nut.Tr(p.Locale(), "buttons.new")
 	p.Data["action"] = p.URLFor("survey.Plugin.CreateForm")
@@ -39,9 +42,27 @@ func (p *Plugin) NewForm() {
 }
 
 type fmForm struct {
-	Title string `form:"title" valid:"Required"`
-	Body  string `form:"body" valid:"Required"`
-	Type  string `form:"type" valid:"Required"`
+	Title    string `form:"title" valid:"Required"`
+	Body     string `form:"body" valid:"Required"`
+	Type     string `form:"type" valid:"Required"`
+	StartUp  string `form:"startUp" valid:"Required"`
+	ShutDown string `form:"shutDown" valid:"Required"`
+	startUp  time.Time
+	shutDown time.Time
+}
+
+func (p *fmForm) Valid(v *validation.Validation) {
+	if begin, err := time.Parse(nut.DATE_FORMAT, p.StartUp); err == nil {
+		p.startUp = begin
+	} else {
+		v.SetError("StartUp", "bad format")
+	}
+	if end, err := time.Parse(nut.DATE_FORMAT, p.ShutDown); err == nil {
+		p.shutDown = end
+	} else {
+		v.SetError("ShutDown", "bad format")
+	}
+
 }
 
 // CreateForm create
@@ -54,12 +75,14 @@ func (p *Plugin) CreateForm() {
 	var item Form
 	if err == nil {
 		item = Form{
-			Title: fm.Title,
-			Body:  fm.Body,
-			Type:  fm.Type,
-			UID:   uuid.New().String(),
-			Mode:  "public",
-			User:  p.CurrentUser(),
+			Title:    fm.Title,
+			Body:     fm.Body,
+			Type:     fm.Type,
+			UID:      uuid.New().String(),
+			StartUp:  fm.startUp,
+			ShutDown: fm.shutDown,
+			Mode:     "public",
+			User:     p.CurrentUser(),
 		}
 		_, err = orm.NewOrm().Insert(&item)
 	}
@@ -141,7 +164,9 @@ func (p *Plugin) UpdateForm() {
 		item.Body = fm.Body
 		item.Type = fm.Type
 		item.UpdatedAt = time.Now()
-		_, err = o.Update(&item, "title", "body", "type", "updated_at")
+		item.StartUp = fm.startUp
+		item.ShutDown = fm.shutDown
+		_, err = o.Update(&item, "title", "body", "start_up", "shut_down", "type", "updated_at")
 	}
 
 	if err == nil {
@@ -169,6 +194,11 @@ func (p *Plugin) DestroyForm() {
 	err := o.QueryTable(&item).
 		Filter("id", p.Ctx.Input.Param(":id")).
 		One(&item)
+	if err == nil {
+		if item.User.ID != p.CurrentUser().ID && !p.IsAdmin() {
+			err = nut.Te(p.Locale(), "errors.not-allow")
+		}
+	}
 	if err == nil {
 		_, err = o.QueryTable(new(Field)).Filter("form_id", item.ID).Delete()
 	}
