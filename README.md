@@ -49,9 +49,12 @@ migrate -path db/migrate -database postgres://postgres@localhost:5432/fly?sslmod
 
   ```
   rabbitmq-plugins enable rabbitmq_management
-  rabbitmqctl add_user test test
-  rabbitmqctl set_user_tags test administrator
-  rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
+  rabbitmqctl change_password guest change-me
+  rabbitmqctl add_user who-am-i change-me
+  rabbitmqctl set_user_tags who-am-i administrator
+  rabbitmqctl list_vhosts
+  rabbitmqctl add_vhost /v-host
+  rabbitmqctl set_permissions -p /v-host who-am-i ".*" ".*" ".*"
   ```
 
 - "RPC failed; HTTP 301 curl 22 The requested URL returned error: 301"

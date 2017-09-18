@@ -86,7 +86,7 @@ func (p *Plugin) CreateArticle() {
 			}
 			tags = append(tags, &Tag{ID: uint(id)})
 		}
-		if err == nil {
+		if err == nil && len(tags) > 0 {
 			_, err = o.QueryM2M(&item, "Tags").Add(tags...)
 		}
 	}
@@ -196,7 +196,7 @@ func (p *Plugin) UpdateArticle() {
 			}
 			tags = append(tags, &Tag{ID: uint(id)})
 		}
-		if err == nil {
+		if err == nil && len(tags) > 0 {
 			_, err = o.QueryM2M(&item, "Tags").Add(tags...)
 		}
 	}
