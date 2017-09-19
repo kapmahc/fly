@@ -1,0 +1,12 @@
+<script id="{{.id}}" name="{{.id}}" type="text/plain">{{str2html .value}}</script>
+<script type="text/javascript">
+var ue = UE.getEditor('{{.id}}');
+ /* 1.传入函数,命令里执行该函数得到参数表,添加到已有参数表里 */
+ue.ready(function() {
+  ue.execCommand('serverparam', function(editor) {
+    return {
+      '_xsrf': '{{.token}}'
+    };
+  });
+});
+</script>

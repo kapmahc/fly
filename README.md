@@ -18,6 +18,16 @@ gvm install go1.9 -B
 gvm use go1.9 --default
 ```
 
+## Install ueditor
+```
+npm install -g grunt-cli
+git clone https://github.com/fex-team/ueditor.git node_modules/ueditor
+cd node_modules/ueditor
+git checkout v1.4.3.3
+npm install
+grunt
+```
+
 ## Atom plugins
 
 - go-plus

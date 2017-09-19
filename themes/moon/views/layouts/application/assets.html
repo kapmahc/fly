@@ -5,4 +5,15 @@
 {{assets_js "/3rd/popper.js/dist/umd/popper.min.js"}}
 {{assets_js "/3rd/bootstrap/dist/js/bootstrap.min.js"}}
 {{assets_js "/3rd/marked/marked.min.js"}}
+{{assets_js "/assets/ueditor.config.js"}}
+{{assets_js "/3rd/ueditor/dist/utf8-php/ueditor.all.min.js"}}
+
+{{if eq .locale "zh-Hans"}}
+{{assets_js "/3rd/ueditor/dist/utf8-php/lang/zh-cn/zh-cn.js"}}
+{{else if eq .locale "zh-Hant"}}
+{{assets_js "/3rd/ueditor/dist/utf8-php/lang/zh-cn/zh-cn.js"}}
+{{else}}
+{{assets_js "/3rd/ueditor/dist/utf8-php/lang/en/en.js"}}
+{{end}}
+
 {{assets_js "/assets/main.js"}}

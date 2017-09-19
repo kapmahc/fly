@@ -1,5 +1,5 @@
 <div class="row justify-content-md-center">
-  <div class="col-md-6">
+  <div class="col-md-8">
     {{template "layouts/application/flash.html" .}}
     <h2>{{.title}}</h2>
     <hr/>
@@ -10,9 +10,10 @@
       </div>
       <div class="form-group">
         <label for="body">{{t .locale "attributes.body"}}</label>
-        <textarea class="form-control" id="body" name="body" rows="6">{{.item.Body}}</textarea>
+        {{template "layouts/application/html-input.html" dict "id" "body" "value" .item.Body "token" .xsrf_token}}        
       </div>
-      <input type="hidden" id="type" name="type" value="markdown"/>
+
+      <input type="hidden" id="type" name="type" value="html"/>
       <div class="form-group">
         {{range .tags}}
         <div class="form-check form-check-inline">

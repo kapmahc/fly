@@ -17,6 +17,7 @@ func (p *Plugin) IndexForms() {
 	var items []Form
 	if _, err := orm.NewOrm().QueryTable(new(Form)).
 		OrderBy("-updated_at").
+		Filter("user_id", p.CurrentUser().ID).
 		All(&items, "id", "title", "updated_at"); err != nil {
 		p.Abort(http.StatusInternalServerError, err)
 	}

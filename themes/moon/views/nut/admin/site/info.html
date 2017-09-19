@@ -1,7 +1,7 @@
 <div class="row justify-content-md-center">
   <div class="col-md-6">
     {{template "layouts/application/flash.html" .}}
-    <h2>favicon.ico</h2>
+    <h2>favicon.ico <img src="{{.favicon}}" alt="{{.favicon}}"/></h2>
     <hr/>
     <form action="{{urlfor "nut.Plugin.PostAdminSiteFavicon"}}" method="post" enctype="multipart/form-data">
       <div class="form-group">
