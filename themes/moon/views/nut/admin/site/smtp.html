@@ -12,7 +12,7 @@
         <label for="port">{{t .locale "attributes.port"}}</label>
         <select class="form-control" id="port" name="port">
           {{range .ports}}
-          <option value="{{.}}" {{if eq . $.smtp.port}}selected{{end}}>{{.}}</option>
+          <option value="{{.}}" {{if eq . $.smtp.Port}}selected{{end}}>{{.}}</option>
           {{end}}
         </select>
       </div>

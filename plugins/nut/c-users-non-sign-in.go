@@ -382,27 +382,27 @@ func doSendMail(buf []byte) error {
 	}
 
 	// ---------------------
-	to, subject, body, sender := mail["to"], mail["subject"], mail["body"], mail["username"]
+	to, subject, body := mail["to"], mail["subject"], mail["body"]
 	if beego.BConfig.RunMode != beego.PROD {
 		beego.Debug("send to", to, ": ", subject, "\n", body)
 		return nil
 	}
-	smtp := make(map[string]interface{})
+	var smtp SMTP
 	if err := Get("site.smtp", &smtp); err != nil {
 		return err
 	}
 
 	msg := gomail.NewMessage()
-	msg.SetHeader("From", sender)
+	msg.SetHeader("From", smtp.Sender)
 	msg.SetHeader("To", to)
 	msg.SetHeader("Subject", subject)
 	msg.SetBody("text/html", body)
 
 	dia := gomail.NewDialer(
-		smtp["host"].(string),
-		smtp["port"].(int),
-		sender,
-		smtp["password"].(string),
+		smtp.Host,
+		smtp.Port,
+		smtp.Sender,
+		smtp.Password,
 	)
 
 	return dia.DialAndSend(msg)

@@ -155,7 +155,7 @@ func (p *Controller) detectLocale() {
 	}
 
 	// 4. Default language is English.
-	if len(lang) == 0 {
+	if !i18n.IsExist(lang) {
 		lang = "en-US"
 	}
 

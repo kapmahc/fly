@@ -79,3 +79,5 @@ migrate -path db/migrate -database postgres://postgres@localhost:5432/fly?sslmod
   ```
 
 - [For gmail smtp](http://stackoverflow.com/questions/20337040/gmail-smtp-debug-error-please-log-in-via-your-web-browser)
+
+- [favicon.ico](http://icoconvert.com/)
