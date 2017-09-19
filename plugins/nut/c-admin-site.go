@@ -8,6 +8,20 @@ import (
 	"golang.org/x/text/language"
 )
 
+// PostAdminSiteFavicon save favicon.ico
+// @router /admin/site/favicon [post]
+func (p *Plugin) PostAdminSiteFavicon() {
+	p.MustSignIn()
+	files, err := p.UploadFile("file")
+	if err == nil {
+		err = Set(orm.NewOrm(), "site.favicon", files[0].URL, false)
+	}
+	p.Flash(func() string {
+		return Tr(p.Locale(), "helpers.success")
+	}, err)
+	p.Redirect("nut.Plugin.GetAdminSiteInfo")
+}
+
 // GetAdminSiteInfo edit site info
 // @router /admin/site/info [get]
 func (p *Plugin) GetAdminSiteInfo() {

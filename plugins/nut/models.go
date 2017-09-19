@@ -80,7 +80,7 @@ func (p User) String() string {
 type Attachment struct {
 	ID           uint      `orm:"column(id)" json:"id"`
 	Title        string    `json:"title"`
-	URL          string    `json:"url"`
+	URL          string    `orm:"column(url)" json:"url"`
 	Length       int64     `json:"length"`
 	MediaType    string    `json:"mediaType"`
 	ResourceID   uint      `orm:"column(resource_id)" json:"resourceId"`

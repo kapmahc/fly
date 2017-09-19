@@ -58,5 +58,6 @@ func (p *Controller) LayoutDashboard() {
 	}
 
 	p.Data["dashboard"] = p.dashboardMenus
+	p.setFavicon()
 	p.Layout = "layouts/dashboard/index.html"
 }

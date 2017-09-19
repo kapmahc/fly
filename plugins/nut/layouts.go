@@ -61,6 +61,22 @@ func (p *Controller) Redirect(name string, args ...interface{}) {
 	p.Controller.Redirect(p.URLFor(name, args...), http.StatusFound)
 }
 
+// Prepare prepare
+func (p *Controller) Prepare() {
+	beego.ReadFromRequest(&p.Controller)
+	p.setXSRF()
+	p.detectLocale()
+	p.parseUserFromRequest()
+}
+
+func (p *Controller) setFavicon() {
+	var fav string
+	if err := Get("site.favicon", &fav); err != nil {
+		fav = "/assets/favicon.png"
+	}
+	p.Data["favicon"] = fav
+}
+
 // HomeURL home url
 func (p *Controller) HomeURL() string {
 	req := p.Ctx.Request
@@ -86,14 +102,6 @@ func (p *Controller) Flash(fn func() string, er error) bool {
 	}
 	f.Store(&p.Controller)
 	return ok
-}
-
-// Prepare prepare
-func (p *Controller) Prepare() {
-	beego.ReadFromRequest(&p.Controller)
-	p.setXSRF()
-	p.detectLocale()
-	p.parseUserFromRequest()
 }
 
 func (p *Controller) setXSRF() {
@@ -173,6 +181,7 @@ func (p *Controller) detectLocale() {
 
 // LayoutApplication use application layout
 func (p *Controller) LayoutApplication() {
+	p.setFavicon()
 	p.Layout = "layouts/application/index.html"
 }
 

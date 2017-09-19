@@ -27,6 +27,7 @@ func (p *Plugin) IndexAttachments() {
 // @router /attachments [post]
 func (p *Plugin) CreateAttachment() {
 	p.MustSignIn()
+
 	var item FriendLink
 	p.Data["item"] = item
 	p.Data[TITLE] = Tr(p.Locale(), "buttons.new")

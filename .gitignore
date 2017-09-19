@@ -1,7 +1,7 @@
 # beego
 /fly*
 /routers/commentsRouter_*.go
-/lastupdate.tmp
+lastupdate.tmp
 
 # nodejs
 /node_modules/
@@ -12,4 +12,5 @@
 
 # test
 /tmp/
-/migrate
+/conf/aws.conf
+/tests/config.go
