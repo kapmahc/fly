@@ -27,6 +27,7 @@ func (p *Controller) LayoutDashboard() {
 		Link{Href: "nut.Plugin.GetUsersLogs", Label: "nut.users.logs.title"},
 		Link{Href: "nut.Plugin.GetUsersProfile", Label: "nut.users.profile.title"},
 		Link{Href: "nut.Plugin.GetUsersChangePassword", Label: "nut.users.change-password.title"},
+		Link{Href: "nut.Plugin.IndexAttachments", Label: "nut.attachments.index.title"},
 	)
 
 	var forum = []Link{
