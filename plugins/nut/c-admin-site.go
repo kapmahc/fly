@@ -12,9 +12,9 @@ import (
 // @router /admin/site/favicon [post]
 func (p *Plugin) PostAdminSiteFavicon() {
 	p.MustSignIn()
-	files, err := p.UploadFile("file")
+	item, err := p.UploadFile("file")
 	if err == nil {
-		err = Set(orm.NewOrm(), "site.favicon", files[0].URL, false)
+		err = Set(orm.NewOrm(), "site.favicon", item.URL, false)
 	}
 	p.Flash(func() string {
 		return Tr(p.Locale(), "helpers.success")

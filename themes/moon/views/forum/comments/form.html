@@ -4,12 +4,12 @@
     <h2>{{.title}}</h2>
     <hr/>
     <form method="post" action="{{.action}}">
-      <input type="hidden" id="articleId" name="articleId" value="{{.item.Article.ID}}"/>            
+      <input type="hidden" id="articleId" name="articleId" value="{{.item.Article.ID}}"/>
       <div class="form-group">
         <label for="body">{{t .locale "attributes.body"}}</label>
-        <textarea class="form-control" id="body" name="body" rows="6">{{.item.Body}}</textarea>
+        {{template "layouts/application/html-input.html" dict "id" "body" "value" .item.Body "token" .xsrf_token}}
       </div>
-      <input type="hidden" id="type" name="type" value="markdown"/>
+      <input type="hidden" id="type" name="type" value="html"/>
       {{template "layouts/application/form-buttons.html" .}}
     </form>
   </div>

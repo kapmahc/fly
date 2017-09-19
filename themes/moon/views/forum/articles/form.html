@@ -12,7 +12,6 @@
         <label for="body">{{t .locale "attributes.body"}}</label>
         {{template "layouts/application/html-input.html" dict "id" "body" "value" .item.Body "token" .xsrf_token}}        
       </div>
-
       <input type="hidden" id="type" name="type" value="html"/>
       <div class="form-group">
         {{range .tags}}

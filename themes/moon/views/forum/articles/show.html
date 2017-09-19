@@ -7,7 +7,7 @@
     &nbsp; <a target="_blank" href="{{urlfor "forum.Plugin.ShowTag" ":id" .ID}}">{{.Name}}</a>
     {{end}}
     <br/>
-    <p class="markdown">{{.item.Body}}</p>
+    <p>{{str2html .item.Body}}</p>
     <br/>
     <h4>
       {{t .locale "forum.attributes.article.comments"}}
@@ -18,7 +18,7 @@
     <hr/>
     {{range .item.Comments}}
     <blockquote class="blockquote">
-      <p class="mb-0 markdown">{{.Body}}</p>
+      <p class="mb-0">{{str2html .Body}}</p>
       <footer class="blockquote-footer">
         <cite>{{dtf .UpdatedAt}}</cite>
       </footer>

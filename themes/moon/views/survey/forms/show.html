@@ -2,7 +2,7 @@
   <div class="col-md-10">
     <h2>{{.item.Title}}</h2>
     <hr/>
-    <p class="markdown">{{.item.Body}}</p>
+    <p>{{str2html .item.Body}}</p>
   </div>
   {{if .available }}
   <div class="col-md-6">

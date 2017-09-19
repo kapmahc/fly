@@ -1,6 +1,7 @@
 package nut
 
 import (
+	"encoding/base64"
 	"net/http"
 
 	"github.com/astaxie/beego"
@@ -57,11 +58,11 @@ func (p *Plugin) PostAttachmentsUeditor() {
 	case "config":
 		p.ueditorConfig()
 	case "uploadimage":
-		p.ueditorUploadImage()
+		p.ueditorUploadFile()
 	case "uploadscrawl":
-		p.ueditorUploadImage()
+		p.ueditorUploadScrawl()
 	case "uploadvideo":
-		p.ueditorUploadVideo()
+		p.ueditorUploadFile()
 	case "uploadfile":
 		p.ueditorUploadFile()
 	case "listimage":
@@ -80,10 +81,17 @@ const (
 	stateFailed  = "FAILED"
 )
 
-func (p *Plugin) ueditorUploadImage() {
-	files, err := p.UploadFile("upfile")
+func (p *Plugin) ueditorUploadScrawl() {
+	buf, err := base64.StdEncoding.DecodeString(p.GetString("upfile"))
+	var att *Attachment
 	if err == nil {
-		att := files[0]
+		att, err = p.writeToS3("scrawl.png", buf, int64(len(buf)))
+	}
+	p.ueditorWrite(att, err)
+}
+
+func (p *Plugin) ueditorWrite(att *Attachment, err error) {
+	if err == nil {
 		p.Data["json"] = H{
 			"state":    stateSuccess,
 			"url":      att.URL,
@@ -98,17 +106,47 @@ func (p *Plugin) ueditorUploadImage() {
 	}
 	p.ServeJSON()
 }
-func (p *Plugin) ueditorUploadVideo() {
-	// TODO
-}
+
 func (p *Plugin) ueditorUploadFile() {
-	// TODO
+	att, err := p.UploadFile("upfile")
+	p.ueditorWrite(att, err)
+}
+
+func (p *Plugin) ueditorManager(f func(*Attachment) bool) {
+	o := orm.NewOrm()
+	var items []Attachment
+	_, err := o.QueryTable(new(Attachment)).
+		Filter("user_id", p.CurrentUser().ID).
+		All(&items, "media_type", "url")
+	var list []H
+	if err == nil {
+		for _, it := range items {
+			if f(&it) {
+				list = append(list, H{"url": it.URL})
+			}
+		}
+	}
+	if err == nil {
+		p.Data["json"] = H{
+			"state": stateSuccess,
+			"list":  list,
+			"start": 0,
+			"total": len(list),
+		}
+	} else {
+		p.Data["json"] = H{"state": stateFailed}
+	}
+	p.ServeJSON()
 }
 func (p *Plugin) ueditorImagesManager() {
-	// TODO
+	p.ueditorManager(func(a *Attachment) bool {
+		return a.IsPicture()
+	})
 }
 func (p *Plugin) ueditorFilesManager() {
-	// TODO
+	p.ueditorManager(func(a *Attachment) bool {
+		return !a.IsPicture()
+	})
 }
 func (p *Plugin) ueditorCatchImage() {
 	// TODO
@@ -152,7 +190,7 @@ func (p *Plugin) ueditorConfig() {
 		"snapscreenUrlPrefix":   "",                                      /* 图片访问路径前缀 */
 		"snapscreenInsertAlign": "none",                                  /* 插入的图片浮动方式 */
 		/* 抓取远程图片配置 */
-		"catcherLocalDomain": []string{"127.0.0.1", "localhost", "img.baidu.com"},
+		"catcherLocalDomain": []string{"127.0.0.1", "localhost", "image.baidu.com"},
 		"catcherActionName":  "catchimage",                                      /* 执行抓取远程图片的action名称 */
 		"catcherFieldName":   "source",                                          /* 提交的图片列表表单名称 */
 		"catcherPathFormat":  "/images/{yyyy}{mm}{dd}/{time}{rand:6}",           /* 上传保存路径,可以自定义保存路径和文件名格式 */

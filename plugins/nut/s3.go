@@ -2,7 +2,6 @@ package nut
 
 import (
 	"bytes"
-	"mime/multipart"
 	"net/http"
 	"path/filepath"
 
@@ -17,64 +16,46 @@ import (
 )
 
 // UploadFile upload file
-func (p *Controller) UploadFile(name string) ([]*Attachment, error) {
-	files, err := p.GetFiles(name)
-	if err != nil {
-		return nil, err
-	}
-	creds := credentials.NewStaticCredentials(
-		beego.AppConfig.String("awsaccesskeyid"),
-		beego.AppConfig.String("awssecretaccesskey"),
-		"",
-	)
-
-	if _, err = creds.Get(); err != nil {
-		return nil, err
-	}
-
-	cfg := aws.NewConfig().
-		WithRegion(beego.AppConfig.String("awss3region")).
-		WithCredentials(creds)
-
-	svc := s3.New(session.New(), cfg)
-
-	var items []*Attachment
-	for _, fh := range files {
-		att, err := p.upload(svc, fh)
-		if err != nil {
-			return nil, err
-		}
-		items = append(items, att)
-	}
-
-	return items, nil
-}
-
-func (p *Controller) upload(svc *s3.S3, fh *multipart.FileHeader) (*Attachment, error) {
-	bucket := beego.AppConfig.String("awss3bucketname")
-	fd, err := fh.Open()
+func (p *Controller) UploadFile(name string) (*Attachment, error) {
+	fd, fh, err := p.GetFile(name)
 	if err != nil {
 		return nil, err
 	}
 	defer fd.Close()
-	fn := uuid.New().String() + filepath.Ext(fh.Filename)
+	buf := make([]byte, fh.Size)
+	if _, err := fd.Read(buf); err != nil {
+		return nil, err
+	}
+	return p.writeToS3(fh.Filename, buf, fh.Size)
+}
 
-	buffer := make([]byte, fh.Size)
-	if _, err = fd.Read(buffer); err != nil {
+func (p *Controller) writeToS3(name string, body []byte, size int64) (*Attachment, error) {
+	reg := beego.AppConfig.String("awss3region")
+	aid := beego.AppConfig.String("awsaccesskeyid")
+	aky := beego.AppConfig.String("awssecretaccesskey")
+	buk := beego.AppConfig.String("awss3bucketname")
+
+	creds := credentials.NewStaticCredentials(aid, aky, "")
+	if _, err := creds.Get(); err != nil {
 		return nil, err
 	}
 
-	fileBytes := bytes.NewReader(buffer)
-	fileType := http.DetectContentType(buffer)
+	svc := s3.New(
+		session.New(),
+		aws.NewConfig().WithRegion(reg).WithCredentials(creds),
+	)
 
-	path := "/upload/" + fn
+	fn := "/upload/" + uuid.New().String() + filepath.Ext(name)
+
+	fileBytes := bytes.NewReader(body)
+	fileType := http.DetectContentType(body)
 
 	params := &s3.PutObjectInput{
 		ACL:           aws.String("public-read"),
-		Bucket:        aws.String(bucket),
-		Key:           aws.String(path),
+		Bucket:        aws.String(buk),
+		Key:           aws.String(fn),
 		Body:          fileBytes,
-		ContentLength: aws.Int64(fh.Size),
+		ContentLength: aws.Int64(size),
 		ContentType:   aws.String(fileType),
 	}
 
@@ -85,12 +66,12 @@ func (p *Controller) upload(svc *s3.S3, fh *multipart.FileHeader) (*Attachment, 
 
 	beego.Info(awsutil.StringValue(resp))
 	item := Attachment{
-		Length:       fh.Size,
-		Title:        fh.Filename,
+		Length:       size,
+		Title:        name,
 		MediaType:    fileType,
 		ResourceID:   DefaultResourceID,
 		ResourceType: DefaultResourceType,
-		URL:          "https://s3-" + beego.AppConfig.String("awss3region") + ".amazonaws.com/" + bucket + path, // FIXME
+		URL:          "https://s3-" + reg + ".amazonaws.com/" + buk + fn, // FIXME
 		User:         p.CurrentUser(),
 	}
 
@@ -98,5 +79,5 @@ func (p *Controller) upload(svc *s3.S3, fh *multipart.FileHeader) (*Attachment, 
 		return nil, err
 	}
 
-	return &item, err
+	return &item, nil
 }

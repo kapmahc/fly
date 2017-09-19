@@ -4,7 +4,7 @@
     <hr/>
     {{range .items}}
     <blockquote class="blockquote">
-      <p class="mb-0 markdown">{{.Body}}</p>
+      <p class="mb-0">{{str2html .Body}}</p>
       <footer class="blockquote-footer">
         <cite><a target="_blank" href="{{urlfor "forum.Plugin.ShowArticle" ":id" .Article.ID}}">{{dtf .UpdatedAt}}</a></cite>
       </footer>
