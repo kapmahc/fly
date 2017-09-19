@@ -5,7 +5,7 @@
     <p>{{str2html .item.Body}}</p>
   </div>
   {{if .available }}
-  <div class="col-md-6">
+  <div class="col-md-10">
     {{template "layouts/application/flash.html" .}}
     <form method="post" action="{{urlfor "survey.Plugin.CreateRecord" "formId" .item.ID}}">
       {{range .item.Fields}}
@@ -15,16 +15,16 @@
           <input type="text" class="form-control" id="{{.Name}}" name="{{.Name}}">
         </div>
       {{else if eq .Type "checkboxs"}}
-        <h5>{{.Label}} {{if .Required}}*{{end}}</h5>
+        <label>{{.Label}} {{if .Required}}*{{end}}</label>        
+        {{$name:=.Name}}
+        {{range $k, $v := (split .Body "\r\n")}}
         <div class="form-check">
-          {{$name:=.Name}}
-          {{range $k, $v := (split .Body "\r\n")}}
           <label class="form-check-label">
             <input class="form-check-input" type="checkbox" id="name_{{$k}}" name="{{$name}}" value="{{$v}}">
             {{$v}}
           </label>
-          {{end}}
         </div>
+        {{end}}
       {{else if eq .Type "select"}}
         <div class="form-group">
           <label for="sortOrder">{{.Label}} {{if .Required}}*{{end}}</label>

@@ -56,6 +56,6 @@ func TestS3Upload(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log(params.())
+
 	t.Logf("response %s", awsutil.StringValue(resp))
 }

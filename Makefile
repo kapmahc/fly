@@ -21,7 +21,7 @@ const (
 endef
 
 build: ANNOUNCE.txt
-	bee pack -v -ba="-ldflags '-s'" -exp=tmp:node_modules:.git -exs=.un~:.swp:.tmp:.go:.gitignore:.env:Makefile
+	bee pack -v -ba="-ldflags '-s'" -exp=tmp:node_modules:.git -exs=.un~:.swp:.tmp:.go:.gitignore:Makefile:aws.conf
 
 
 
