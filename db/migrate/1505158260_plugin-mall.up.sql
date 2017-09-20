@@ -1,17 +1,18 @@
 CREATE TABLE mall_addresses (
   id BIGSERIAL PRIMARY KEY,
-  username VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(32) NOT NULL,
   zip VARCHAR(12) NOT NULL,
-  street VARCHAR(255) NOT NULL,
+  line1 VARCHAR(255) NOT NULL,
+  line2 VARCHAR(255) NOT NULL,
   city VARCHAR(32) NOT NULL,
   state VARCHAR(32) NOT NULL,
   country VARCHAR(32) NOT NULL,
-  phone VARCHAR(32) NOT NULL,
   user_id BIGINT NOT NULL REFERENCES users,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
-CREATE INDEX idx_mall_addresses_usersname ON mall_addresses(username);
+CREATE INDEX idx_mall_addresses_name ON mall_addresses(name);
 CREATE INDEX idx_mall_addresses_zip ON mall_addresses(zip);
 CREATE INDEX idx_mall_addresses_city ON mall_addresses(city);
 CREATE INDEX idx_mall_addresses_state ON mall_addresses(state);
@@ -26,6 +27,7 @@ CREATE TABLE mall_stores (
   address_id BIGINT NOT NULL REFERENCES mall_addresses,
   owner_id BIGINT NOT NULL REFERENCES users,
   currency CHAR(3) NOT NULL,
+  metric BOOLEAN NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
@@ -61,12 +63,14 @@ CREATE TABLE mall_products (
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
+CREATE INDEX idx_mall_products_name ON mall_products(name);
 
 CREATE TABLE mall_products_tags (
-  tag_id BIGINT NOT NULL REFERENCES mall_tags ON DELETE CASCADE,
-  product_id     BIGINT NOT NULL REFERENCES mall_products ON DELETE CASCADE,
-  PRIMARY KEY (product_id, tag_id)
+  id BIGSERIAL PRIMARY KEY,
+  mall_tags_id BIGINT NOT NULL REFERENCES mall_tags ON DELETE CASCADE,
+  mall_products_id BIGINT NOT NULL REFERENCES mall_products ON DELETE CASCADE
 );
+CREATE UNIQUE INDEX idx_mall_products_tags_ids ON mall_products_tags(mall_products_id, mall_tags_id);
 
 CREATE TABLE mall_variants(
   id BIGSERIAL PRIMARY KEY,
@@ -78,7 +82,7 @@ CREATE TABLE mall_variants(
   height NUMERIC(12,2) NOT NULL,
   width NUMERIC(12,2) NOT NULL,
   length NUMERIC(12,2) NOT NULL,
-  stores_id BIGINT NOT NULL REFERENCES mall_stores,
+  stock BIGINT NOT NULL,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
@@ -89,20 +93,11 @@ CREATE TABLE mall_journals (
   id BIGSERIAL PRIMARY KEY,
   action VARCHAR(255) NOT NULL,
   quantity BIGINT NOT NULL,
-  store_id BIGINT NOT NULL REFERENCES mall_stores,
   variant_id  BIGINT NOT NULL REFERENCES mall_variants,
   user_id BIGINT NOT NULL REFERENCES users,
   created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE TABLE mall_stocks (
-  id BIGSERIAL PRIMARY KEY,
-  quantity BIGINT NOT NULL,
-  store_id BIGINT NOT NULL REFERENCES mall_stores,
-  variant_id  BIGINT NOT NULL REFERENCES mall_variants,
-  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
-  updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);
 
 CREATE TABLE mall_properties (
   id BIGSERIAL PRIMARY KEY,

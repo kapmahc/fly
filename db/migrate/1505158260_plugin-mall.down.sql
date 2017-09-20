@@ -1,5 +1,4 @@
 DROP TABLE mall_properties;
-DROP TABLE mall_stocks;
 DROP TABLE mall_journals;
 DROP TABLE mall_variants;
 DROP TABLE mall_products_tags;
