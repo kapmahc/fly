@@ -1,6 +1,55 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
+	"package": [
+		{
+			"checksumSHA1": "1WtQunzrKQX0R3SdCa4SF8ggoH4=",
+			"path": "github.com/go-pg/pg",
+			"revision": "6dcb6ae9a382f79e069530229f8b1e73599595c5",
+			"revisionTime": "2017-09-12T09:49:39Z"
+		},
+		{
+			"checksumSHA1": "wgZs7easROirVkrkKLoJFy7/0Xo=",
+			"path": "github.com/go-pg/pg/internal",
+			"revision": "6dcb6ae9a382f79e069530229f8b1e73599595c5",
+			"revisionTime": "2017-09-12T09:49:39Z"
+		},
+		{
+			"checksumSHA1": "ORf1Tzc47pPj2NCf8IsUZozU5rE=",
+			"path": "github.com/go-pg/pg/internal/parser",
+			"revision": "6dcb6ae9a382f79e069530229f8b1e73599595c5",
+			"revisionTime": "2017-09-12T09:49:39Z"
+		},
+		{
+			"checksumSHA1": "+3edzn8Bl7CHEhyJy0VIqj5LjZ0=",
+			"path": "github.com/go-pg/pg/internal/pool",
+			"revision": "6dcb6ae9a382f79e069530229f8b1e73599595c5",
+			"revisionTime": "2017-09-12T09:49:39Z"
+		},
+		{
+			"checksumSHA1": "9xlOV/6jVextGbBQfr8N6pgCt54=",
+			"path": "github.com/go-pg/pg/orm",
+			"revision": "6dcb6ae9a382f79e069530229f8b1e73599595c5",
+			"revisionTime": "2017-09-12T09:49:39Z"
+		},
+		{
+			"checksumSHA1": "GBu4wUospff6NnPHHHYxipn2I/U=",
+			"path": "github.com/go-pg/pg/types",
+			"revision": "6dcb6ae9a382f79e069530229f8b1e73599595c5",
+			"revisionTime": "2017-09-12T09:49:39Z"
+		},
+		{
+			"checksumSHA1": "VIp1lZm6joWhlNdwhady8u//qRw=",
+			"path": "github.com/jinzhu/inflection",
+			"revision": "1c35d901db3da928c72a72d8458480cc9ade058f",
+			"revisionTime": "2017-01-02T12:52:26Z"
+		},
+		{
+			"checksumSHA1": "7Qm/EUxEnhQgbMPWUsKrVswLUsc=",
+			"path": "github.com/urfave/cli",
+			"revision": "7fb9c86b14e6a702a4157ccb5a863f07d844a207",
+			"revisionTime": "2017-09-11T04:08:19Z"
+		}
+	],
 	"rootPath": "github.com/kapmahc/fly"
 }

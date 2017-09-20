@@ -1,5 +1,6 @@
 dist=dist
-pkg=github.com/kapmahc/fly/plugins/nut
+pkg=github.com/kapmahc/fly/plugins/nut/app
+theme=bootstrap
 
 VERSION=`git rev-parse --short HEAD`
 BUILD_TIME=`date -R`
@@ -15,13 +16,15 @@ build: backend frontend
 
 frontend:
 	cd dashboard && npm run build
-	-cp -r dashboard/dist $(dist)/dashboard
+	-cp -r dashboard/build $(dist)/dashboard
 
 
 
 backend:
 	go build -ldflags "-s -w -X ${pkg}.Version=${VERSION} -X '${pkg}.BuildTime=${BUILD_TIME}' -X '${pkg}.AuthorName=${AUTHOR_NAME}' -X ${pkg}.AuthorEmail=${AUTHOR_EMAIL} -X '${pkg}.Copyright=${COPYRIGHT}' -X '${pkg}.Usage=${USAGE}'" -o ${dist}/fly main.go
-	-cp -r locales db templates themes $(dist)/
+	-cp -r locales templates $(dist)/
+	mkdir -p $(dist)/themes/$(theme)
+	-cp -r themes/$(theme)/{assets,views,package.json,package-lock.json} $(dist)/themes/$(theme)
 
 
 init:

@@ -8,5 +8,8 @@ node_modules
 .*.swp
 .*.un~
 
+# build
+/dist*
+
 # test
 /tmp/
