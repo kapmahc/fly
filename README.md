@@ -45,14 +45,6 @@ CREATE USER user-name WITH PASSWORD 'change-me';
 GRANT ALL PRIVILEGES ON DATABASE db-name TO user-name;
 ```
 
-- Database migrations.
-
-```
-go get -u -d github.com/mattes/migrate/cli github.com/lib/pq
-go build -ldflags '-s -w' -tags 'postgres' -o $GOPATH/bin/migrate github.com/mattes/migrate/cli
-migrate -path db/migrate -database postgres://postgres@localhost:5432/fly?sslmode=disable up
-```
-
 - Chrome browser: F12 => Console settings => Log XMLHTTPRequests
 
 - Rabbitmq Management Plugin(<http://localhost:15612>)

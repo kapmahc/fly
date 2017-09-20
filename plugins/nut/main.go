@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -95,6 +96,12 @@ func Main(args ...string) error {
 			Aliases: []string{"g"},
 			Usage:   "generate file template",
 			Subcommands: []cli.Command{
+				{
+					Name:    "deploy.sh",
+					Aliases: []string{"dp"},
+					Usage:   "generate deploy.sh",
+					Action:  generateDeploySh,
+				},
 				{
 					Name:    "nginx",
 					Aliases: []string{"ng"},
@@ -356,4 +363,35 @@ func mainAction(_ *cli.Context) error {
 	beego.ErrorController(&ErrorController{})
 	beego.Run()
 	return nil
+}
+
+func generateDeploySh(_ *cli.Context) error {
+	tpl, err := template.ParseFiles(path.Join("templates", "deploy.sh"))
+	if err != nil {
+		return err
+	}
+
+	fn := path.Join("tmp", "deploy.sh")
+	fmt.Printf("generate file %s\n", fn)
+	fd, err := os.OpenFile(fn, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
+	if err != nil {
+		return err
+	}
+	defer fd.Close()
+
+	cfg := beego.BConfig
+	return tpl.Execute(
+		fd,
+		map[string]interface{}{
+			"port": cfg.Listen.HTTPPort,
+			"root": filepath.Join("var", "www", cfg.ServerName),
+			"shared_directories": []string{
+				"node_modules",
+				"tmp",
+			},
+			"shared_files": []string{
+				"conf/app.conf",
+				"conf/aws.conf",
+			},
+		})
 }
