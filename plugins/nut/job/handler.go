@@ -4,8 +4,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	// PREFIX prefix
+	PREFIX = "health://"
+)
+
 // Handler handler
-type Handler func([]byte) error
+type Handler func([]byte) (interface{}, error)
 
 var handlers = make(map[string]Handler)
 

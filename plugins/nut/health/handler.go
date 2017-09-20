@@ -1,7 +1,12 @@
-package helath
+package health
 
 import (
 	log "github.com/sirupsen/logrus"
+)
+
+const (
+	// PREFIX prefix
+	PREFIX = "health://"
 )
 
 // Handler handler

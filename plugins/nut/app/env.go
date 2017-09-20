@@ -83,7 +83,7 @@ func init() {
 		"user":     "guest",
 		"password": "guest",
 		"host":     "localhost",
-		"port":     "5672",
+		"port":     5672,
 		"virtual":  "fly-dev",
 	})
 
