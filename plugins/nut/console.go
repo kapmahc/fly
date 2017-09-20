@@ -3,17 +3,96 @@ package nut
 import (
 	"crypto/x509/pkix"
 	"fmt"
+	"log"
 	"os"
 	"path"
+	"strconv"
 	"text/template"
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/go-pg/migrations"
+	"github.com/go-pg/pg"
 	"github.com/kapmahc/fly/plugins/nut/app"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli"
 	"golang.org/x/text/language"
 )
+
+func databaseExample(*cli.Context) error {
+	args := viper.GetStringMap("postgresql")
+	fmt.Printf("CREATE USER %s WITH PASSWORD '%s';\n", args["user"], args["password"])
+	fmt.Printf("CREATE DATABASE %s WITH ENCODING='UTF8';\n", args["dbname"])
+	fmt.Printf("GRANT ALL PRIVILEGES ON DATABASE %s TO %s;\n", args["dbname"], args["user"])
+	return nil
+}
+
+func runDatabase(args ...string) (int64, int64, error) {
+	if err := app.Open(); err != nil {
+		return 0, 0, err
+	}
+	db := DB()
+	if _, _, err := migrations.Run(db, "init"); err != nil {
+		return 0, 0, err
+	}
+	var ov, nv int64
+
+	err := db.RunInTransaction(func(tx *pg.Tx) (err error) {
+		ov, nv, err = migrations.Run(tx, args...)
+		return
+	})
+	log.Printf("old version: %d; new version: %d", ov, nv)
+	return ov, nv, err
+
+}
+
+func migrateDatabase(*cli.Context) error {
+	_, _, err := runDatabase("up")
+	return err
+}
+
+func rollbackDatabase(*cli.Context) error {
+	_, _, err := runDatabase("down")
+	return err
+}
+
+func databaseVersion(*cli.Context) error {
+	_, _, err := runDatabase("version")
+	return err
+}
+
+func connectDatabase(*cli.Context) error {
+	args := viper.GetStringMap("postgresql")
+	return Shell("psql",
+		"-h", args["host"].(string),
+		"-p", strconv.Itoa(int(args["port"].(int64))),
+		"-U", args["user"].(string),
+		args["dbname"].(string),
+	)
+}
+
+func createDatabase(*cli.Context) error {
+	args := viper.GetStringMap("postgresql")
+	return Shell("psql",
+		"-h", args["host"].(string),
+		"-p", strconv.Itoa(int(args["port"].(int64))),
+		"-U", "postgres",
+		"-c", fmt.Sprintf(
+			"CREATE DATABASE %s WITH ENCODING='UTF8'",
+			args["dbname"],
+		),
+	)
+}
+
+func dropDatabase(*cli.Context) error {
+	args := viper.GetStringMap("postgresql")
+	return Shell("psql",
+		"-h", args["host"].(string),
+		"-p", strconv.Itoa(int(args["port"].(int64))),
+		"-U", "postgres",
+		"-c", fmt.Sprintf("DROP DATABASE %s", args["dbname"]),
+	)
+}
 
 func generateConfig(c *cli.Context) error {
 	const fn = "config.toml"
@@ -43,7 +122,7 @@ func generateMigration(c *cli.Context) error {
 		return nil
 	}
 	const pkg = "migrations"
-	version := time.Now().Format("20060102150405000")
+	version := time.Now().Format("20060102150405")
 	root := path.Join("db", pkg)
 	if err := os.MkdirAll(root, 0700); err != nil {
 		return err
@@ -56,7 +135,7 @@ func generateMigration(c *cli.Context) error {
 	}
 	defer fd.Close()
 
-	tpl, err := template.ParseFiles(path.Join("templates", "nginx.conf"))
+	tpl, err := template.ParseFiles(path.Join("templates", "migration.go"))
 	if err != nil {
 		return err
 	}
@@ -254,4 +333,55 @@ func init() {
 			},
 		},
 	})
+
+	app.RegisterCommand(cli.Command{
+		Name:    "database",
+		Aliases: []string{"db"},
+		Usage:   "database operations",
+		Subcommands: []cli.Command{
+			{
+				Name:    "example",
+				Usage:   "scripts example for create database and user",
+				Aliases: []string{"e"},
+				Action:  app.Action(databaseExample),
+			},
+			{
+				Name:    "migrate",
+				Usage:   "migrate the DB to the most recent version available",
+				Aliases: []string{"m"},
+				Action:  app.Action(migrateDatabase),
+			},
+			{
+				Name:    "rollback",
+				Usage:   "roll back the version by 1",
+				Aliases: []string{"r"},
+				Action:  app.Action(rollbackDatabase),
+			},
+			{
+				Name:    "version",
+				Usage:   "dump the migration status for the current DB",
+				Aliases: []string{"v"},
+				Action:  app.Action(databaseVersion),
+			},
+			{
+				Name:    "connect",
+				Usage:   "connect database",
+				Aliases: []string{"c"},
+				Action:  app.Action(connectDatabase),
+			},
+			{
+				Name:    "create",
+				Usage:   "create database",
+				Aliases: []string{"n"},
+				Action:  app.Action(createDatabase),
+			},
+			{
+				Name:    "drop",
+				Usage:   "drop database",
+				Aliases: []string{"d"},
+				Action:  app.Action(dropDatabase),
+			},
+		},
+	})
+
 }

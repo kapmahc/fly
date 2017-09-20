@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	_ "github.com/kapmahc/fly/db/migrations"
 	_ "github.com/kapmahc/fly/plugins/erp"
 	_ "github.com/kapmahc/fly/plugins/forum"
 	_ "github.com/kapmahc/fly/plugins/mall"

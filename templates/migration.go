@@ -1,18 +1,19 @@
-package main
+package migrations
 
 import (
 	"log"
 
-	"github.com/go-pg/migrations"
+	mig "github.com/go-pg/migrations"
 )
 
 func init() {
-	migrations.Register(func(db migrations.DB) error {
-		log.Println("migrate {{.Version}}_{{.Name}}")
+	const version = "{{.Version}}_{{.Name}}"
+	mig.Register(func(db mig.DB) error {
+		log.Println("migrate database", version)
 		_, err := db.Exec(`TODO`)
 		return err
-	}, func(db migrations.DB) error {
-		log.Println("rollback {{.Version}}_{{.Name}}")
+	}, func(db mig.DB) error {
+		log.Println("rollback database", version)
 		_, err := db.Exec(`TODO`)
 		return err
 	})
