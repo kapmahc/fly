@@ -1,0 +1,12 @@
+# go
+/vendor/*/
+
+# nodejs
+node_modules
+
+# editor
+.*.swp
+.*.un~
+
+# test
+/tmp/
