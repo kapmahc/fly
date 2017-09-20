@@ -1,4 +1,4 @@
-package nut
+package app
 
 import (
 	"crypto/x509/pkix"
@@ -13,7 +13,6 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/go-pg/migrations"
 	"github.com/go-pg/pg"
-	"github.com/kapmahc/fly/plugins/nut/app"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli"
 	"golang.org/x/text/language"
@@ -28,7 +27,7 @@ func databaseExample(*cli.Context) error {
 }
 
 func runDatabase(args ...string) (int64, int64, error) {
-	if err := app.Open(); err != nil {
+	if err := Open(); err != nil {
 		return 0, 0, err
 	}
 	db := DB()
@@ -174,7 +173,7 @@ func generateLocale(c *cli.Context) error {
 }
 
 func generateNginxConf(*cli.Context) error {
-	if err := app.Open(); err != nil {
+	if err := Open(); err != nil {
 		return err
 	}
 	pwd, err := os.Getwd()
@@ -182,7 +181,7 @@ func generateNginxConf(*cli.Context) error {
 		return err
 	}
 
-	name := app.Name()
+	name := Name()
 	fn := path.Join("tmp", "nginx.conf")
 	if err = os.MkdirAll(path.Dir(fn), 0700); err != nil {
 		return err
@@ -256,7 +255,7 @@ func generateSsl(c *cli.Context) error {
 }
 
 func init() {
-	app.RegisterCommand(cli.Command{
+	RegisterCommand(cli.Command{
 		Name:    "generate",
 		Aliases: []string{"g"},
 		Usage:   "generate file template",
@@ -278,7 +277,7 @@ func init() {
 				Name:    "nginx",
 				Aliases: []string{"ng"},
 				Usage:   "generate nginx.conf",
-				Action:  app.Action(generateNginxConf),
+				Action:  Action(generateNginxConf),
 			},
 			{
 				Name:    "migration",
@@ -334,7 +333,7 @@ func init() {
 		},
 	})
 
-	app.RegisterCommand(cli.Command{
+	RegisterCommand(cli.Command{
 		Name:    "database",
 		Aliases: []string{"db"},
 		Usage:   "database operations",
@@ -343,43 +342,43 @@ func init() {
 				Name:    "example",
 				Usage:   "scripts example for create database and user",
 				Aliases: []string{"e"},
-				Action:  app.Action(databaseExample),
+				Action:  Action(databaseExample),
 			},
 			{
 				Name:    "migrate",
 				Usage:   "migrate the DB to the most recent version available",
 				Aliases: []string{"m"},
-				Action:  app.Action(migrateDatabase),
+				Action:  Action(migrateDatabase),
 			},
 			{
 				Name:    "rollback",
 				Usage:   "roll back the version by 1",
 				Aliases: []string{"r"},
-				Action:  app.Action(rollbackDatabase),
+				Action:  Action(rollbackDatabase),
 			},
 			{
 				Name:    "version",
 				Usage:   "dump the migration status for the current DB",
 				Aliases: []string{"v"},
-				Action:  app.Action(databaseVersion),
+				Action:  Action(databaseVersion),
 			},
 			{
 				Name:    "connect",
 				Usage:   "connect database",
 				Aliases: []string{"c"},
-				Action:  app.Action(connectDatabase),
+				Action:  Action(connectDatabase),
 			},
 			{
 				Name:    "create",
 				Usage:   "create database",
 				Aliases: []string{"n"},
-				Action:  app.Action(createDatabase),
+				Action:  Action(createDatabase),
 			},
 			{
 				Name:    "drop",
 				Usage:   "drop database",
 				Aliases: []string{"d"},
-				Action:  app.Action(dropDatabase),
+				Action:  Action(dropDatabase),
 			},
 		},
 	})

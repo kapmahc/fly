@@ -1,4 +1,4 @@
-package nut
+package app
 
 import (
 	"crypto/tls"
@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/go-pg/pg"
-	"github.com/kapmahc/fly/plugins/nut/app"
 	"github.com/spf13/viper"
 )
 
@@ -39,7 +38,7 @@ func openDb() error {
 	}
 
 	db := pg.Connect(&opt)
-	if !app.IsProduction() {
+	if !IsProduction() {
 		db.OnQueryProcessed(func(evt *pg.QueryProcessedEvent) {
 			qry, err := evt.FormattedQuery()
 			if err != nil {
@@ -56,5 +55,5 @@ func openDb() error {
 }
 
 func init() {
-	app.RegisterResource(openDb)
+	RegisterResource(openDb)
 }

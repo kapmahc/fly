@@ -195,6 +195,18 @@
 			"revisionTime": "2017-03-29T04:21:07Z"
 		},
 		{
+			"checksumSHA1": "2UmMbNHc8FBr98mJFN1k8ISOIHk=",
+			"path": "github.com/garyburd/redigo/internal",
+			"revision": "70e1b1943d4fc9c56791abaa6f4d1e727b9ab925",
+			"revisionTime": "2017-09-14T05:10:19Z"
+		},
+		{
+			"checksumSHA1": "zxm1ahSCAclqI4JIvyuRbytF2pA=",
+			"path": "github.com/garyburd/redigo/redis",
+			"revision": "70e1b1943d4fc9c56791abaa6f4d1e727b9ab925",
+			"revisionTime": "2017-09-14T05:10:19Z"
+		},
+		{
 			"checksumSHA1": "QeKwBtN2df+j+4stw3bQJ6yO4EY=",
 			"path": "github.com/gin-contrib/sse",
 			"revision": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae",

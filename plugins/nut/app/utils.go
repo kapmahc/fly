@@ -1,4 +1,4 @@
-package nut
+package app
 
 import (
 	"math/rand"
