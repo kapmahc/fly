@@ -10,8 +10,8 @@ func init() {
 		"access_key_id":     "change-me",
 		"secret_access_key": "change-me",
 		"s3": map[string]string{
-			"region":      "us-west-2",
-			"bucket_name": "www.change-me.com",
+			"region": "us-west-2",
+			"bucket": "www.change-me.com",
 		},
 	})
 	viper.SetDefault("redis", map[string]interface{}{
