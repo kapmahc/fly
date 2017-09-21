@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <h1>sign in</h1>
+  <application-layout>
+    <h1>sign in {{ $t('nut.users.sign-in.title') }}</h1>
     <router-link :to="{ name: 'users.sign-in'}">Sign in</router-link>
     <router-link :to="{ name: 'users.sign-up'}">Sign Up</router-link>
     <router-link :to="{ name: 'home'}">Home</router-link>
-  </div>
+  </application-layout>
 </template>
 
 <script>
