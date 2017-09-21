@@ -383,4 +383,23 @@ func init() {
 		},
 	})
 
+	RegisterCommand(cli.Command{
+		Name:    "routes",
+		Aliases: []string{"rt"},
+		Usage:   "print out all defined routes",
+		Action: Action(func(*cli.Context) error {
+			rt, err := Router()
+			if err != nil {
+				return err
+			}
+
+			tpl := "%-7s %s\n"
+			fmt.Printf(tpl, "METHOD", "PATH")
+			for _, r := range rt.Routes() {
+				fmt.Printf(tpl, r.Method, r.Path)
+			}
+			return nil
+		}),
+	})
+
 }

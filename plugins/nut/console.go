@@ -50,13 +50,17 @@ func _startHTTPListen() error {
 		"application starting on http://localhost:%d",
 		port,
 	)
-	if !app.IsProduction() {
-		return Router().Run(addr)
+	rt, err := app.Router()
+	if err != nil {
+		return err
+	}
+	if app.IsProduction() {
+		return rt.Run(addr)
 	}
 
 	srv := &http.Server{
 		Addr:    addr,
-		Handler: Router(),
+		Handler: rt,
 	}
 
 	go func() {
@@ -100,21 +104,5 @@ func init() {
 		Usage:   "start the app server",
 		Action:  app.Action(startServer),
 	})
-	app.RegisterCommand(cli.Command{
-		Name:    "routes",
-		Aliases: []string{"rt"},
-		Usage:   "print out all defined routes",
-		Action: func(*cli.Context) error {
-			if err := openRouter(); err != nil {
-				return err
-			}
 
-			tpl := "%-7s %s\n"
-			fmt.Printf(tpl, "METHOD", "PATH")
-			for _, r := range Router().Routes() {
-				fmt.Printf(tpl, r.Method, r.Path)
-			}
-			return nil
-		},
-	})
 }

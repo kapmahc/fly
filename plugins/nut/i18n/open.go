@@ -31,7 +31,7 @@ func open() error {
 		}
 		_languages = append(_languages, tag)
 		lang := tag.String()
-		log.Info("find locale", lang)
+		log.Info("find locale ", lang)
 
 		cfg, err := ini.Load(path)
 		if err != nil {
@@ -41,7 +41,6 @@ func open() error {
 		for _, sec := range cfg.Sections() {
 			z := sec.Name()
 			for k, v := range sec.KeysHash() {
-				log.Debugf("find", z+"."+k)
 				_items[z+"."+k] = v
 			}
 		}
