@@ -16,7 +16,7 @@ build: backend frontend
 
 frontend:
 	cd dashboard && npm run build
-	-cp -r dashboard/build $(dist)/dashboard
+	-cp -r dashboard/dist $(dist)/dashboard
 
 
 
@@ -33,4 +33,4 @@ init:
 	cd dashboard && npm install
 
 clean:
-	-rm -r $(dist) $(dist).tar.bz2 dashboard/build
+	-rm -r $(dist) $(dist).tar.bz2 dashboard/dist

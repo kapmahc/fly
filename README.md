@@ -42,7 +42,7 @@ grunt
 - go-plus
 - git-plus
 - file-icons
-- language-babel
+- language-vue
 
 ## Notes
 
