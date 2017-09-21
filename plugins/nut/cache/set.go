@@ -23,6 +23,6 @@ func Set(key string, val interface{}, ttl time.Duration) error {
 
 	c := app.Redis().Get()
 	defer c.Close()
-	_, err := c.Do("SET", PREFIX+key, val, "EX", int(ttl/time.Second))
+	_, err := c.Do("SET", PREFIX+key, buf.Bytes(), "EX", int(ttl/time.Second))
 	return err
 }

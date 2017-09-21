@@ -56,6 +56,10 @@ func get(lang, code string) (string, error) {
 		return msg, nil
 	}
 
+	// for k, v := range _items {
+	// 	fmt.Println(k, v)
+	// }
+
 	if msg, ok := _items[lang+"."+code]; ok {
 		cache.Set(key, msg, time.Hour*24)
 		return msg, nil

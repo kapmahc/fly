@@ -36,6 +36,9 @@ func init() {
 				Usage:   "clear cache items",
 				Aliases: []string{"c"},
 				Action: app.Action(func(_ *cli.Context) error {
+					if err := app.Open(); err != nil {
+						return err
+					}
 					return Flush()
 				}),
 			},

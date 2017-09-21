@@ -41,7 +41,7 @@ func open() error {
 		for _, sec := range cfg.Sections() {
 			z := sec.Name()
 			for k, v := range sec.KeysHash() {
-				_items[z+"."+k] = v
+				_items[lang+"."+z+"."+k] = v
 			}
 		}
 

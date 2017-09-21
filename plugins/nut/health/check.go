@@ -12,7 +12,7 @@ import (
 // Check run check
 func Check() {
 	for n, h := range handlers {
-		log.Info("do helath check", n)
+		log.Info("do helath check ", n)
 		now := time.Now()
 		v, e := h()
 		d := time.Now().Sub(now)
