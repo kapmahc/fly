@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/gorilla/csrf"
 )
 
 const (
@@ -64,7 +65,9 @@ func HTML(t string, f func(*gin.Context) error) gin.HandlerFunc {
 			fls[k] = template.HTML(strings.Join(msg, "<br/>"))
 		}
 		ss.Save()
+
 		c.Set(FLASH, fls)
+		c.Set(csrf.TemplateTag, csrf.TemplateField(c.Request))
 
 		c.HTML(http.StatusOK, t, c.Keys)
 	}

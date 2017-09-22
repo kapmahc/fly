@@ -345,6 +345,12 @@
 			"revisionTime": "2016-08-17T18:46:32Z"
 		},
 		{
+			"checksumSHA1": "q8qteAwOzNYqC3p/UI6IBwoIV2o=",
+			"path": "github.com/gorilla/csrf",
+			"revision": "8aae08ff9fb9a8fe293deea3d057f37d89744670",
+			"revisionTime": "2017-09-12T15:53:03Z"
+		},
+		{
 			"checksumSHA1": "ucTBCc7dDRKLGPsYfAzu/Gq63qA=",
 			"path": "github.com/gorilla/securecookie",
 			"revision": "e59506cc896acb7f7bf732d4fdf5e25f7ccd8983",
@@ -469,6 +475,12 @@
 			"path": "github.com/pelletier/go-toml",
 			"revision": "1d6b12b7cb290426e27e6b4e38b89fcda3aeef03",
 			"revisionTime": "2017-09-04T19:58:09Z"
+		},
+		{
+			"checksumSHA1": "rJab1YdNhQooDiBWNnt7TLWPyBU=",
+			"path": "github.com/pkg/errors",
+			"revision": "2b3a18b5f0fb6b4f9190549597d3f962c02bc5eb",
+			"revisionTime": "2017-09-10T13:46:14Z"
 		},
 		{
 			"checksumSHA1": "BYvROBsiyAXK4sq6yhDe8RgT4LM=",

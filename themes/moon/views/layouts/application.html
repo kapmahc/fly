@@ -65,7 +65,7 @@
 {{end}}
 
 {{define "application-form-buttons"}}
-  {{.xsrf_input}}
+  {{.csrfField}}
   <button type="submit" class="btn btn-primary">{{t .locale "buttons.submit"}}</button>
   <button type="reset" class="btn btn-secondary">{{t .locale "buttons.reset"}}</button>
 {{end}}

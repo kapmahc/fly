@@ -30,10 +30,16 @@ func openRouter(rt *gin.Engine) error {
 	}
 	rt.SetHTMLTemplate(tpl)
 
+	store := sessions.NewCookieStore([]byte(viper.GetString("secret")))
+	store.Options(sessions.Options{
+		HttpOnly: true,
+		MaxAge:   0,
+		Secure:   viper.GetBool("server.ssl"),
+	})
 	rt.Use(
 		sessions.Sessions(
 			"session",
-			sessions.NewCookieStore([]byte(viper.GetString("secret"))),
+			store,
 		),
 	)
 	rt.Use(i18n.DetectLocale)

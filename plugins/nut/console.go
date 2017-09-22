@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/csrf"
 	"github.com/kapmahc/fly/plugins/nut/app"
 	"github.com/kapmahc/fly/plugins/nut/health"
 	"github.com/kapmahc/fly/plugins/nut/job"
@@ -54,13 +55,20 @@ func _startHTTPListen() error {
 	if err != nil {
 		return err
 	}
-	if app.IsProduction() {
-		return rt.Run(addr)
-	}
 
 	srv := &http.Server{
-		Addr:    addr,
-		Handler: rt,
+		Addr: addr,
+		Handler: csrf.Protect(
+			[]byte(viper.GetString("secret")),
+			csrf.CookieName("csrf"),
+			csrf.RequestHeader("Authenticity-Token"),
+			csrf.FieldName("authenticity_token"),
+			csrf.Secure(viper.GetBool("server.ssl")),
+		)(rt),
+	}
+
+	if !app.IsProduction() {
+		return srv.ListenAndServe()
 	}
 
 	go func() {
