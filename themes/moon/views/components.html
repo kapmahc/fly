@@ -1,0 +1,19 @@
+{{define "ueditor"}}
+  {{if eq .locale "zh-Hans"}}
+    {{assets_js "/3rd/ueditor/dist/utf8-php/lang/zh-cn/zh-cn.js"}}
+  {{else if eq .locale "zh-Hant"}}
+    {{assets_js "/3rd/ueditor/dist/utf8-php/lang/zh-cn/zh-cn.js"}}
+  {{else}}
+    {{assets_js "/3rd/ueditor/dist/utf8-php/lang/en/en.js"}}
+  {{end}}
+{{end}}
+
+{{define "metas"}}
+  <meta charset="utf-8">
+  <meta name="description" content="{{t .locale "site.description"}}">
+  <meta name="keywords" content="{{t .locale "site.keywords"}}">
+  <meta name="author" content="{{t .locale "site.author.name"}}<{{t .locale "site.author.email"}}>">
+  <meta name="_xsrf" content="{{.xsrf_token}}">
+  <link rel="icon" type="image/png" href="{{.favicon}}" />
+  <title>{{.title}}|{{t .locale "site.subhead"}}|{{t .locale "site.title"}}</title>
+{{end}}

@@ -1,7 +1,85 @@
 {{define "application-header" }}
-<div>application header</div>
+<!DOCTYPE html>
+<html lang="{{.locale}}">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {{template "metas" .}}
+    {{template "application-assets" .}}
+  </head>
+  <body>
+    <div class="container">
 {{end}}
 
 {{define "application-footer" }}
-<div>application footer</div>
+      {{template "application-footer-box" .}}
+    </div>
+  </body>
+</html>
+{{end}}
+
+{{define "application-footer-box"}}
+  <hr>
+  <footer>
+    <p class="float-right">
+      {{t .locale "footer.others"}}
+      {{range .languages}}
+      <a href="/?locale={{.}}">{{t $.locale (printf "languages.%s" .)}}</a>
+      {{end}}
+    </p>
+    <p>
+      &copy;{{t .locale "site.copyright"}}
+      {{range (links "footer")}}
+      &middot; <a href="{{.Href}}">{{t $.locale .Label}}</a>
+      {{end}}
+    </p>
+  </footer>
+{{end}}
+
+{{define "application-flash"}}
+  {{if .flash.error}}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{.flash.error}}</strong>
+  </div>
+  {{end}}
+
+  {{if .flash.warning}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{.flash.warning}}</strong>
+  </div>
+  {{end}}
+
+  {{if .flash.notice}}
+  <div class="alert alert-info alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{.flash.notice}}</strong>
+  </div>
+  {{end}}
+{{end}}
+
+{{define "application-form-buttons"}}
+  {{.xsrf_input}}
+  <button type="submit" class="btn btn-primary">{{t .locale "buttons.submit"}}</button>
+  <button type="reset" class="btn btn-secondary">{{t .locale "buttons.reset"}}</button>
+{{end}}
+
+{{define "application-assets"}}
+  {{assets_css "/3rd/bootstrap/dist/css/bootstrap.min.css"}}
+  {{assets_css "/3rd/font-awesome/css/font-awesome.min.css"}}
+  {{assets_css "/assets/application.css"}}
+  {{assets_js "/3rd/jquery/dist/jquery.min.js"}}
+  {{assets_js "/3rd/popper.js/dist/umd/popper.min.js"}}
+  {{assets_js "/3rd/bootstrap/dist/js/bootstrap.min.js"}}
+  {{assets_js "/3rd/marked/marked.min.js"}}
+  {{assets_js "/assets/ueditor.config.js"}}
+  {{assets_js "/3rd/ueditor/dist/utf8-php/ueditor.all.min.js"}}
+  {{template "ueditor" .}}
+  {{assets_js "/assets/main.js"}}
 {{end}}
