@@ -18,3 +18,7 @@ cd fly
 cargo update
 cargo build --release
 ```
+
+## Atom plugins
+
+- language-rust
