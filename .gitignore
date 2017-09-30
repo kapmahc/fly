@@ -1,0 +1,14 @@
+
+# rust
+/target/
+**/*.rs.bk
+
+# nodejs
+/node_modules/
+
+# editor
+.*.swp
+.*.un~
+
+# test
+/tmp/
