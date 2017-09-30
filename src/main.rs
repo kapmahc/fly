@@ -2,13 +2,9 @@
 #![plugin(rocket_codegen)]
 
 extern crate rocket;
-
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
+extern crate fly;
 
 
 fn main() {
-    rocket::ignite().mount("/", routes![index]).launch();
+    rocket::ignite().mount("/", routes![fly::nut::controllers::index]).launch();
 }
