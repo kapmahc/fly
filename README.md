@@ -10,6 +10,7 @@ rustup default nightly
 rustup update
 cargo install rustfmt-nightly --force
 cargo install racer --force
+rustup component add rust-src
 ```
 
 add to ~/.zshrd
@@ -33,6 +34,7 @@ cargo build --release
 ## Atom plugins
 
 - language-rust
+- racer
 
 ## Documents
 
